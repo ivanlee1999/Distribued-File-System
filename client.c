@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "udp.h"
-#include "libmfs.c"
 
 #define BUFFER_SIZE (1000)
 
