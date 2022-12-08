@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "udp.h"
+#include "libmfs.c"
 
 #define BUFFER_SIZE (1000)
 
@@ -9,6 +10,22 @@ int main(int argc, char *argv[]) {
 
     int sd = UDP_Open(20000);
     int rc = UDP_FillSockAddr(&addrSnd, "localhost", 10000);
+    char* request = argv[1];
+    char* func = strtok(request,"(");
+    printf("%s\n", func);
+    if(strcmp(func,"MFS_Init") == 0){
+
+    }
+    else if (strcmp(func,"MFS_Lookup") == 0)
+    {
+        /* code */
+    }
+    else if (strcmp(func,"MFS_Shutdown") == 0)
+    {
+         MFS_Shutdown();
+    }
+    
+    
 
     char message[BUFFER_SIZE];
     sprintf(message, "hello world");

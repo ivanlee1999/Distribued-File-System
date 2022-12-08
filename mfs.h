@@ -18,13 +18,13 @@ typedef struct __MFS_DirEnt_t {
 } MFS_DirEnt_t;
 
 
-int MFS_Init(char *hostname, int port);
-int MFS_Lookup(int pinum, char *name);
-int MFS_Stat(int inum, MFS_Stat_t *m);
-int MFS_Write(int inum, char *buffer, int offset, int nbytes);
-int MFS_Read(int inum, char *buffer, int offset, int nbytes);
-int MFS_Creat(int pinum, int type, char *name);
-int MFS_Unlink(int pinum, char *name);
+int MFS_Init(char *hostname, int port);         //1
+int MFS_Lookup(int pinum, char *name);          //2
+int MFS_Stat(int inum, MFS_Stat_t *m);          //3
+int MFS_Write(int inum, char *buffer, int offset, int nbytes);        //4
+int MFS_Read(int inum, char *buffer, int offset, int nbytes);         //5
+int MFS_Creat(int pinum, int type, char *name);                       //6
+int MFS_Unlink(int pinum, char *name);                                //7
 int MFS_Shutdown();
 
 #endif // __MFS_h__

@@ -1,11 +1,20 @@
 #include <stdio.h>
 #include "udp.h"
+#include "signal.h"
 
 #define BUFFER_SIZE (1000)
 
+int sd;
+
+void intHandler(int dummy) {
+    UDP_Close(sd);
+    exit(130);
+}
+ 
 // server code
 int main(int argc, char *argv[]) {
-    int sd = UDP_Open(10000);
+    signal(SIGINT, intHandler);
+    sd = UDP_Open(10000);
     assert(sd > -1);
     while (1) {
 	struct sockaddr_in addr;
@@ -15,7 +24,7 @@ int main(int argc, char *argv[]) {
 	printf("server:: read message [size:%d contents:(%s)]\n", rc, message);
 	if (rc > 0) {
             char reply[BUFFER_SIZE];
-            sprintf(reply, "goodbye world");
+            sprintf(reply, "goodbye CS537");
             rc = UDP_Write(sd, &addr, reply, BUFFER_SIZE);
 	    printf("server:: reply\n");
 	} 
@@ -25,4 +34,3 @@ int main(int argc, char *argv[]) {
     
 
 
- 
