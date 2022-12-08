@@ -36,6 +36,12 @@ void intHandler(int dummy) {
 //     }
 //     return 0; 
 // }
+
+
+int lookup(int pinum, char *name){
+
+}
+
     
 
 int shutdown(){
@@ -47,6 +53,24 @@ int shutdown(){
 int startServer(int port, char* img){
     sd = UDP_Open(port);
     assert(sd > -1);
+
+
+    //mmap image to systen
+    if ((fd = open (img, O_RDONLY)) < 0)
+   {  
+        fprintf(stderr,"An error has occurred\n");
+        return -1;
+   }
+   
+
+
+
+
+
+
+
+
+
     while (1) {
         struct sockaddr_in addr;
         Msg* request = malloc(sizeof(Msg));
@@ -59,6 +83,7 @@ int startServer(int port, char* img){
             case 1:
                 break;
             case 2:
+                lookup(request->inum, request->name);
                 break;
             case 3:
                 break;
