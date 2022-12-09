@@ -38,8 +38,59 @@ int MFS_Init(char *hostname, int port){
 }
 
 
+int MFS_Lookup(int pinum, char* name){
+    Msg request,response;
+    request.requestType =2;
+    request.inum = pinum;
+    request.name = name;
+    int rc = sendRequest(request, response,  serverAddress, serverPort);
+    return rc;
+}
 
+int MFS_Stat(int inum, MFS_Stat_t *m){
+    Msg request,response;
+    request.requestType = 3;
+    request.inum = inum;
+    request.stat = m;
+    int rc = sendRequest(request, response,  serverAddress, serverPort);
+}
 
+int MFS_Write(int inum, char *buffer, int offset, int nbytes){
+    Msg request,response;
+    request.requestType= 4;
+    request.buffer = buffer;
+    request.inum = inum;
+    request.offset = offset;
+    request.nbytes = nbytes;
+    int rc = sendRequest(request, response,  serverAddress, serverPort);
+}        //4
+
+int MFS_Read(int inum, char *buffer, int offset, int nbytes){
+    Msg request,response;
+    request.requestType= 5;
+    request.buffer = buffer;
+    request.inum = inum;
+    request.offset = offset;
+    request.nbytes = nbytes;
+    int rc = sendRequest(request, response,  serverAddress, serverPort);
+}         //5
+
+int MFS_Creat(int pinum, int type, char *name){
+    Msg request,response;
+    request.requestType = 6;
+    request.inum = inum;
+    request.type = type;
+    request.name =name;
+    int rc = sendRequest(request, response,  serverAddress, serverPort); 
+}                       //6
+
+int MFS_Unlink(int pinum, char *name){
+    Msg request,response;
+    request.inum = inum;
+    request.requestType = 7;
+    request.type = type;
+    int rc = sendRequest(request, response,  serverAddress, serverPort);
+}                                //7
 
 int MFS_Shutdown(){
     Msg request;

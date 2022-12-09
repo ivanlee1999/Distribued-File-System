@@ -1,8 +1,8 @@
-#include"mfs.h"
-#include"ufs.h"
+#include "mfs.h"
+#include "ufs.h"
 
 typedef struct Msg{
-    char requestType;
+    int requestType;
     int inum;
     int type;       //regular or directory
     char name[28];
