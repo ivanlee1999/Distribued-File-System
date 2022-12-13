@@ -8,8 +8,6 @@ char* serverAddress;
 int serverPort;
 
 
-
-
 int sendRequest(Msg request, Msg response, char* address, int port){
     struct sockaddr_in addrSnd, addrRcv;
     int sd = UDP_Open(20000);
@@ -53,6 +51,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
     request.inum = inum;
     request.stat = m;
     int rc = sendRequest(request, response,  serverAddress, serverPort);
+    return rc;
 }
 
 int MFS_Write(int inum, char *buffer, int offset, int nbytes){
@@ -63,6 +62,7 @@ int MFS_Write(int inum, char *buffer, int offset, int nbytes){
     request.offset = offset;
     request.nbytes = nbytes;
     int rc = sendRequest(request, response,  serverAddress, serverPort);
+    return rc;
 }        //4
 
 int MFS_Read(int inum, char *buffer, int offset, int nbytes){
@@ -73,6 +73,7 @@ int MFS_Read(int inum, char *buffer, int offset, int nbytes){
     request.offset = offset;
     request.nbytes = nbytes;
     int rc = sendRequest(request, response,  serverAddress, serverPort);
+    return rc;
 }         //5
 
 int MFS_Creat(int pinum, int type, char *name){
@@ -82,6 +83,7 @@ int MFS_Creat(int pinum, int type, char *name){
     request.type = type;
     request.name =name;
     int rc = sendRequest(request, response,  serverAddress, serverPort); 
+    return rc;
 }                       //6
 
 int MFS_Unlink(int pinum, char *name){
@@ -90,6 +92,7 @@ int MFS_Unlink(int pinum, char *name){
     request.requestType = 7;
     request.type = type;
     int rc = sendRequest(request, response,  serverAddress, serverPort);
+    return rc;
 }                                //7
 
 int MFS_Shutdown(){

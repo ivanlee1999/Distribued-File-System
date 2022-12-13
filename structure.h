@@ -8,6 +8,6 @@ typedef struct Msg{
     char name[28];
     int offset;
     int nbytes;
-    MFS_Stat_t stat;
+    MFS_Stat_t* stat;
     char buffer[MFS_BLOCK_SIZE];
 }Msg;
