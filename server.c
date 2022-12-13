@@ -39,12 +39,16 @@ unsigned int get_bit(unsigned int *bitmap, int position) {
    return (bitmap[index] >> offset) & 0x1;
 }
 
-void set_bit(unsigned int *bitmap, int position) {
-   int index = position / 32;
-   int offset = 31 - (position % 32);
-   bitmap[index] |=  0x1 << offset;
-}
- 
+// 	if (rc > 0) {
+//             char reply[BUFFER_SIZE];
+//             sprintf(reply, "goodbye CS537");
+//             rc = UDP_Write(sd, &addr, reply, BUFFER_SIZE);
+// 	    printf("server:: reply\n");
+// 	} 
+//     }
+//     return 0; 
+// }
+
 
 int lookup(int pinum, char *name){
     int pinumBlock = superBlock.inode_region_addr + (pinum * INODE_SIZE) / UFS_BLOCK_SIZE; 

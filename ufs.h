@@ -8,6 +8,8 @@
 
 #define DIRECT_PTRS (30)
 
+#define INODE_SIZE (128)
+
 typedef struct {
     int type;   // MFS_DIRECTORY or MFS_REGULAR
     int size;   // bytes
@@ -33,3 +35,6 @@ typedef struct __super {
 
 
 #endif // __ufs_h__
+
+
+
