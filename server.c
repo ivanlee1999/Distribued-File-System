@@ -86,6 +86,45 @@ int lookup(int pinum, char *name){
     return -1;
 }
 
+int FS_Stat(int inum, MFS_Stat_t *m){
+
+}
+
+int FS_Write(int inum, char *buffer, int offset, int nbytes){
+
+}
+
+int FS_Read(int inum, char *buffer, int offset, int nbytes){
+
+int inumBlock = superBlock.inode_bitmap_addr + (inum * INODE_SIZE)/UFS_BLOCK_SIZE;
+int inumPos = (INODE_SIZE * inum) +inodeStartPosition;
+if(getbit(iMapStartPosition,inumBlock) != 1) 
+return -1;
+
+inode_t inode;
+
+lseek(fd,inumPos,SEEK_SET);
+read(fd,&inode, sizeof(inode_t));
+if(inode.type == UFS_DIRECTORY){
+    //READ DIR CONTENTS INTO mfs_dir pointer
+    
+
+}
+
+else{
+    //READ FILE CONTENTS INTO buffer
+}
+
+
+}
+
+int FS_Creat(int pinum, int type, char *name){
+
+}
+
+int FS_Unlink(int pinum, char *name){
+
+}
     
 
 int shutdown(){
@@ -137,14 +176,19 @@ int startServer(int port, char* img){
                 lookup(request->inum, request->name);
                 break;
             case 3:
+                FS_Stat(request->inum,request->stat);
                 break;
             case 4:
+                FS_Write(request->inum,request->buffer,request->offset,request -> nbytes);
                 break;
             case 5:
+                FS_Read(request->inum,request->buffer,request->offset,request -> nbytes);
                 break;
             case 6:
+                FS_Creat(request ->inum,request->type,request->name);
                 break;
             case 7:
+                FS_Unlink(request -> inum, request -> name);
                 break;
             case 8:
                 shutdown();
