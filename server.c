@@ -18,6 +18,7 @@
 
 int sd;
 int fd;
+struct sockaddr_in *addr;
 
 super_t superBlock;
 int iMapStartPosition;
@@ -39,55 +40,90 @@ unsigned int get_bit(unsigned int *bitmap, int position) {
    return (bitmap[index] >> offset) & 0x1;
 }
 
-// 	if (rc > 0) {
-//             char reply[BUFFER_SIZE];
-//             sprintf(reply, "goodbye CS537");
-//             rc = UDP_Write(sd, &addr, reply, BUFFER_SIZE);
-// 	    printf("server:: reply\n");
-// 	} 
-//     }
-//     return 0; 
-// }
+
+void set_bit(unsigned int *bitmap, int position) {
+   int index = position / 32;
+   int offset = 31 - (position % 32);
+   bitmap[index] |= 0x1 << offset;
+}
 
 
-int lookup(int pinum, char *name){
+
+
+void lookup(int pinum, char *name){
+    Msg reply;
+    reply.inum = -1;
+    reply.requestType = 9; // type is reply
+    // pinode in the bitmap(in block number)
     int pinumBlock = superBlock.inode_region_addr + (pinum * INODE_SIZE) / UFS_BLOCK_SIZE; 
+    // pinode array position(in address)
     int pinumPosition = inodeStartPosition + pinum * INODE_SIZE;
 
     //check inode bitmap
-    if(get_bit((unsigned int *) iMapStartPosition, pinumBlock) == 0) return-1;
-
-    //check inode type
-    inode_t pinode;
-    //move read pointer to the position, SEEK_SET  means starting from the beginning
-    lseek(fd, pinumPosition, SEEK_SET);
-    read(fd, &pinode, sizeof(inode_t));
-    if(pinode.type == UFS_REGULAR_FILE) return -1;
-
-    //go through all 30 dir entries
-    for(int i = 0; i< DIRECT_PTRS; i++){
-        //not sure if it is block number or address
-        unsigned int dirEntryBlock = pinode.direct[i];
-        // read data block
-        int dirEntryBlockAddr = dataStartPosition + dirEntryBlock * UFS_BLOCK_SIZE;
-        lseek(ld, dirEntryBlockAddr, SEEK_SET);
-        char* entryBlock = malloc(UFS_BLOCK_SIZE);
-        read(fd, &entryBlock, UFS_BLOCK_SIZE);
-        dir_ent_t* dirEntry;
-        for(int j = 0; j < UFS_BLOCK_SIZE / sizeof(dir_ent_t); j++){
-            dirEntry = entryBlock + j * sizeof(dir_ent_t);
-            if(dirEntry->inum != -1){
-                if(strcmp(dirEntry->name, name) == 0){
-                    return dirEntry->inum;
+    if(get_bit((unsigned int *) iMapStartPosition, pinumBlock) == 0){
+        reply.inum = -1;
+    } 
+    else{
+        //check inode type
+        inode_t pinode;
+        //move read pointer to the position, SEEK_SET  means starting from the beginning
+        lseek(fd, pinumPosition, SEEK_SET);
+        read(fd, &pinode, sizeof(inode_t));
+        if(pinode.type == UFS_REGULAR_FILE){
+            reply.inum = -1;
+        }
+        else{
+            //go through all 30 dir entries
+            for(int i = 0; i< DIRECT_PTRS; i++){
+                //not sure if it is block number or address
+                unsigned int dirEntryBlock = pinode.direct[i];
+                // read data block, get block number, the index should start from superblocks
+                int dirEntryBlockAddr =  dirEntryBlock * UFS_BLOCK_SIZE;
+                // int dirEntryBlockAddr = dataStartPosition + dirEntryBlock * UFS_BLOCK_SIZE;
+                lseek(fd, dirEntryBlockAddr, SEEK_SET);
+                char* entryBlock = malloc(UFS_BLOCK_SIZE);
+                read(fd, &entryBlock, UFS_BLOCK_SIZE);
+                dir_ent_t* dirEntry;
+                for(int j = 0; j < UFS_BLOCK_SIZE / sizeof(dir_ent_t); j++){
+                    dirEntry = entryBlock + j * sizeof(dir_ent_t);
+                    if(dirEntry->inum != -1){
+                        if(strcmp(dirEntry->name, name) == 0){
+                            reply.inum =  dirEntry->inum;
+                        }
+                    }
                 }
             }
         }
     }
-    return -1;
+
+    int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    
 }
 
 int FS_Stat(int inum, MFS_Stat_t *m){
+    Msg reply;
+    reply.inum = -1;
+    reply.requestType = 9; // type is reply
+    // pinode in the bitmap(in block number)
+    int inumBlock = superBlock.inode_region_addr + (inum * INODE_SIZE) / UFS_BLOCK_SIZE; 
+    // pinode array position(in address)
+    int inumPosition = inodeStartPosition + inum * INODE_SIZE;
 
+    //check inode bitmap
+    if(get_bit((unsigned int *) iMapStartPosition, inumBlock) == 0){
+        reply.inum = -1;
+    } 
+    else{
+        //check inode type
+        inode_t inode;
+        //move read pointer to the position, SEEK_SET  means starting from the beginning
+        lseek(fd, inumPosition, SEEK_SET);
+        read(fd, &inode, sizeof(inode_t));
+        reply.inum = 0;
+        reply.stat->size = inode.size;
+        reply.stat->type = inode.type;
+    }
+    int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
 }
 
 int FS_Write(int inum, char *buffer, int offset, int nbytes){
@@ -98,7 +134,7 @@ int FS_Read(int inum, char *buffer, int offset, int nbytes){
 
 int inumBlock = superBlock.inode_bitmap_addr + (inum * INODE_SIZE)/UFS_BLOCK_SIZE;
 int inumPos = (INODE_SIZE * inum) +inodeStartPosition;
-if(getbit(iMapStartPosition,inumBlock) != 1) 
+if(get_bit(iMapStartPosition,inumBlock) != 1) 
 return -1;
 
 inode_t inode;
@@ -127,7 +163,7 @@ int FS_Unlink(int pinum, char *name){
 }
     
 
-int shutdown(){
+int FS_Shutdown(){
     fsync(fd);
     exit(0);
 }
@@ -162,10 +198,9 @@ int startServer(int port, char* img){
     if(fsInit(img) < 0) return -1;
 
     while (1) {
-        struct sockaddr_in addr;
         Msg* request = malloc(sizeof(Msg));
         printf("server:: waiting...\n");
-        int rc = UDP_Read(sd, &addr, request, BUFFER_SIZE);
+        int rc = UDP_Read(sd, addr, request, sizeof(Msg));
         printf("server:: read message [size:%d contents:(%s)]\n", rc, request);
         if (rc > 0) {
             switch (request->requestType)
@@ -191,7 +226,7 @@ int startServer(int port, char* img){
                 FS_Unlink(request -> inum, request -> name);
                 break;
             case 8:
-                shutdown();
+                FS_Shutdown();
                 break;
             default:
                 break;

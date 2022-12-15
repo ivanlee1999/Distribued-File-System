@@ -27,4 +27,5 @@ int MFS_Creat(int pinum, int type, char *name);                       //6
 int MFS_Unlink(int pinum, char *name);                                //7
 int MFS_Shutdown();                                                   //8
 
+//9 for reply
 #endif // __MFS_h__
