@@ -1,3 +1,11 @@
+#include <unistd.h>
+#include <assert.h>
+#include <sys/types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+
 #include "mfs.h"
 #include "udp.h"
 #include "structure.h"
@@ -38,6 +46,7 @@ int MFS_Init(char *hostname, int port){
 
 int MFS_Lookup(int pinum, char* name){
     Msg request,response;
+    response.type = 9;
     request.requestType =2;
     request.inum = pinum;
     strncpy(request.name,name,28);
@@ -48,6 +57,7 @@ int MFS_Lookup(int pinum, char* name){
 
 int MFS_Stat(int inum, MFS_Stat_t *m){
     Msg request,response;
+    response.type = 9;
     request.requestType = 3;
     request.inum = inum;
     request.stat = m;
@@ -57,6 +67,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
 
 int MFS_Write(int inum, char *buffer, int offset, int nbytes){
     Msg request,response;
+    response.type = 9;
     request.requestType= 4;
     //request.buffer = buffer;
     strncpy(request.buffer,buffer,sizeof(request.buffer));
@@ -69,6 +80,7 @@ int MFS_Write(int inum, char *buffer, int offset, int nbytes){
 
 int MFS_Read(int inum, char *buffer, int offset, int nbytes){
     Msg request,response;
+    response.type = 9;
     request.requestType= 5;
     //request.buffer = buffer;
     strncpy(request.buffer,buffer,sizeof(request.buffer));
@@ -81,6 +93,7 @@ int MFS_Read(int inum, char *buffer, int offset, int nbytes){
 
 int MFS_Creat(int pinum, int type, char *name){
     Msg request,response;
+    response.type = 9;
     request.requestType = 6;
     request.inum = pinum;
     request.type = type;
@@ -92,6 +105,7 @@ int MFS_Creat(int pinum, int type, char *name){
 
 int MFS_Unlink(int pinum, char *name){
     Msg request,response;
+    response.type = 9;
     request.inum = pinum;
     request.requestType = 7;
     int rc = sendRequest(request, response,  serverAddress, serverPort);
@@ -101,6 +115,7 @@ int MFS_Unlink(int pinum, char *name){
 int MFS_Shutdown(){
     Msg request;
     Msg response;
+    response.type = 9;
 
     request.requestType = 8;
     int rc = sendRequest(request, response,  serverAddress, serverPort);
