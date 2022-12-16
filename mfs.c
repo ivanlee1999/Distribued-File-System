@@ -10,6 +10,17 @@
 #include "udp.h"
 #include "structure.h"
 
+#include <time.h>
+#include <stdlib.h>
+
+int MIN_PORT = 20000;
+int MAX_PORT = 40000;
+
+
+// Bind random client port number
+// int fd = UDP_Open(port_num);
+
+
 #define BUFFER_SIZE (1000)
 
 char* serverAddress;
@@ -17,19 +28,23 @@ int serverPort;
 
 
 int sendRequest(Msg request, Msg response, char* address, int port){
+    srand(time(0));
+    int port_num = (rand() % (MAX_PORT - MIN_PORT) + MIN_PORT);
+
     struct sockaddr_in addrSnd, addrRcv;
-    int sd = UDP_Open(20000);
+    printf("open portnumbrt %d\n", port_num);
+    int sd = UDP_Open(port_num);
     int rc = UDP_FillSockAddr(&addrSnd, address, port);
     
     
     rc = UDP_Write(sd, &addrSnd,(char*) &request, BUFFER_SIZE);
 
     if (rc < 0) {
-	printf("client:: failed to send\n");
-	exit(1);
+        printf("client:: failed to send\n");
+        exit(1);
     }
 
-
+    printf("waiting for response\n");
     rc = UDP_Read(sd, &addrRcv,(char*) &response, BUFFER_SIZE);
     printf("client:: got reply [size:%d contents:(%s)\n", rc, (char*)&response);
     return 0;

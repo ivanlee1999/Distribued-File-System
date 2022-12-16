@@ -18,7 +18,8 @@
 
 int sd;
 int fd;
-struct sockaddr_in *addr;
+struct sockaddr_in addr;
+int portNumber;
 
 super_t superBlock;
 unsigned int iMapStartPosition;
@@ -98,7 +99,7 @@ int lookup(int pinum, char *name){
         }
     }
 
-    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     return -1;
     
 }
@@ -126,12 +127,16 @@ int FS_Stat(int inum, MFS_Stat_t *m){
         reply.stat->size = inode.size;
         reply.stat->type = inode.type;
     }
-    int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    int rc = UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
+    printf("finished sending stat\n");
     return rc;
 }
 
 int FS_Write(int inum, char *buffer, int offset, int nbytes){
-return -1;
+    Msg reply;
+    reply.type = 9;
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
+    return -1;
 }
 
 //TODO: Do UDP write after writing to buffer and send reply
@@ -144,7 +149,7 @@ int inumBlock = superBlock.inode_bitmap_addr + (inum * sizeof(inode_t))/UFS_BLOC
 int inumPos = (sizeof(inode_t) * inum) +inodeStartPosition;
 if(get_bit(&iMapStartPosition,inumBlock) != 1) {
 reply.requestType = -1;
-UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
 return -1;
 }
 inode_t inode;
@@ -156,7 +161,7 @@ read(fd,&inode, sizeof(inode_t));
     
     if( (inode.type = MFS_DIRECTORY) && (nbytes % sizeof(dir_ent_t) != 0 || offset % sizeof(dir_ent_t) != 0)){
         reply.requestType = -1;
-        UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+        UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
         return -1;
     }
 
@@ -169,7 +174,7 @@ read(fd,&inode, sizeof(inode_t));
     }
     if(inode.direct[dataBlock] == -1 || offset>inode.size){
         reply.requestType = -1;
-        UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+        UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
         return -1;
     }
     if(nbytes1 ){
@@ -229,7 +234,10 @@ read(fd,&inode, sizeof(inode_t));
 }
 
 int FS_Creat(int pinum, int type, char *name){
-return -1;
+    Msg reply;
+    reply.type = 9;
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
+    return -1;
 }
 
 int FS_Unlink(int pinum, char *name)
@@ -238,7 +246,7 @@ int FS_Unlink(int pinum, char *name)
     reply.requestType = -1;
     unsigned int bitmapAddr = (unsigned int)superBlock.inode_bitmap_addr;
 if(get_bit(&bitmapAddr,pinum) != 1){
-    int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    int rc = UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     fsync(fd);
     return rc;
 }
@@ -251,14 +259,14 @@ if(inode.type == MFS_REGULAR_FILE){
     unsigned int inodeBitmapAddr = (unsigned int)superBlock.inode_bitmap_addr;
     set_bit(&inodeBitmapAddr,pinum);
     fsync(fd);
-    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     return 1;
     
 }
 else{
     int inum = lookup(pinum,name);
     if(inum == -1){
-    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     fsync(fd);
     return -1;
     }
@@ -267,14 +275,14 @@ else{
     lseek(fd,dirPos,SEEK_SET);
     read(fd,&dirInode,sizeof(inode_t));
     if(dirInode.direct[0] != -1){
-    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     fsync(fd);
     return -1;
     }
     reply.requestType = 1;
     unsigned int inodeBitmapAddr = (unsigned int)superBlock.inode_bitmap_addr;
     set_bit(&inodeBitmapAddr,inum);
-    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     fsync(fd);
     return 1;
 
@@ -283,8 +291,17 @@ else{
     
 
 int FS_Shutdown(){
+    Msg reply;
+    reply.type = 9;
     fsync(fd);
-    exit(0);
+	close(fd);
+	// m->c_received_rc = 0;
+	//isShutdown = true;
+    UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
+	UDP_Close(portNumber);
+    printf("shutdown\n");
+	exit(0);
+	return 0;
 }
 
 
@@ -293,7 +310,7 @@ int FS_Shutdown(){
 
 
 int fsInit(char* img){
-    if ((fd = open (img, O_RDONLY)) < 0)
+    if ((fd = open (img, O_RDWR|O_CREAT, S_IRWXU)) < 0)
     {  
         fprintf(stderr,"An error has occurred\n");
         return -1;
@@ -309,6 +326,8 @@ int fsInit(char* img){
 
 
 int startServer(int port, char* img){
+    portNumber = port;
+    printf("server port %d \n", port);
     sd = UDP_Open(port);
     assert(sd > -1);
     //char *src, *dst;
@@ -319,7 +338,10 @@ int startServer(int port, char* img){
     while (1) {
         Msg* request = malloc(sizeof(Msg));
         printf("server:: waiting...\n");
-        int rc = UDP_Read(sd, addr, (char*)request, sizeof(Msg));
+        int rc = UDP_Read(sd, &addr, (char*)request, sizeof(Msg));
+
+        // rc = UDP_Write(sd, &addr,"test connection", BUFFER_SIZE);
+
         //int responseRet;
         printf("server:: read message [size:%d contents:(%s)]\n", rc, (char*)request);
         if (rc > 0) {
@@ -328,16 +350,18 @@ int startServer(int port, char* img){
             case 1:
                 break;
             case 2:
+                printf("request2\n");
                 lookup(request->inum, request->name);
                 break;
             case 3:
+                printf("request3\n");
                 FS_Stat(request->inum,request->stat);
                 break;
             case 4:
                 FS_Write(request->inum,request->buffer,request->offset,request -> nbytes);
                 break;
             case 5:
-             FS_Read(request->inum,request->buffer,request->offset,request -> nbytes);
+                FS_Read(request->inum,request->buffer,request->offset,request -> nbytes);
                 break;
             case 6:
                 FS_Creat(request ->inum,request->type,request->name);
@@ -357,6 +381,7 @@ int startServer(int port, char* img){
 }
 
 int main(int argc, char *argv[]) {
+    signal(SIGINT, intHandler);
     if (argc != 3)
 		perror("Error : Incorrect arguments\n");
 

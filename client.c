@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include "udp.h"
 #include "mfs.c"
+#include <time.h>
+#include <stdlib.h>
 #define BUFFER_SIZE (1000)
+
+
+
+
 
 // client code
 int main(int argc, char *argv[]) {
@@ -9,39 +15,30 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in addrSnd, addrRcv;
 
     int sd = UDP_Open(20000);
-    int rc = UDP_FillSockAddr(&addrSnd, "localhost", 10000);
+    int rc = UDP_FillSockAddr(&addrSnd, "localhost", 2343);
     char* request = argv[1];
-    char* func = strtok(request,"(");
-    printf("before print func\n");
-    printf("%s\n", func);
-    if(strcmp(func,"MFS_Init") == 0){
-
+    MFS_Init("localhost", 2343);
+    
+    if(strcmp(request, "1") == 0){
+        printf("request1\n");
+        MFS_Init("localhost", 2343);
     }
-    else if (strcmp(func,"MFS_Lookup") == 0)
-    {
-        
-        /* code */
+    if(strcmp(request, "2") == 0){
+        printf("request2\n");
+        MFS_Lookup(2, "test");
     }
-    else if (strcmp(func,"MFS_Shutdown") == 0)
-    {
-       //  MFS_Shutdown();
+    if(strcmp(request, "3") == 0){
+        printf("request3\n");
+        MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
+        MFS_Stat(3, m);
+        printf("size: %d \n", m->size);
+        printf("type: %d \n", m->type);
+    }
+    if(strcmp(request, "8") == 0){
+        printf("request8\n");
+        MFS_Shutdown();
     }
     
-    
-
-    char message[BUFFER_SIZE];
-    sprintf(message, "hello world");
-
-    printf("client:: send message [%s]\n", message);
-    rc = UDP_Write(sd, &addrSnd, message, BUFFER_SIZE);
-    if (rc < 0) {
-	printf("client:: failed to send\n");
-	exit(1);
-    }
-
-    printf("client:: wait for reply...\n");
-    rc = UDP_Read(sd, &addrRcv, message, BUFFER_SIZE);
-    printf("client:: got reply [size:%d contents:(%s)\n", rc, message);
     return 0;
 }
 

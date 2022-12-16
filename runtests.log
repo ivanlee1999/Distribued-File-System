@@ -8,7 +8,7 @@ build project using make
 **********************************************************************
 Trying to build project using make
 make
-make: Nothing to be done for 'all'.
+rm -f testfile
 
 
 test build PASSED
@@ -28,12 +28,19 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
+Starting server on port 5129
+/tmp/tmpOZCWu0/p/server 5129 /home/yifanli/CS537/project4/test.img
+server port 5129 
+server:: waiting...
+server:: read message [size:1000 contents:()]
+shutdown
+open portnumbrt 29139
+waiting for response
+client:: got reply [size:1000 contents:(0)
 
 
-test shutdown FAILED
+test shutdown PASSED
  (init server and client then call shutdown)
- libmfs should export fucntion 'MFS_Init'
 
 ('starting', 'creat')
 
@@ -49,425 +56,18 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
+Starting server on port 5057
+/tmp/tmpOZCWu0/p/server 5057 /home/yifanli/CS537/project4/test.img
+open portnumbrt 29139
+waiting for response
+client:: got reply [size:1000 contents:(0)
+open portnumbrt 29139
+client:: failed to send
 
 
 test creat FAILED
  (creat a file and check with lookup)
- libmfs should export fucntion 'MFS_Init'
+ Timelimit (10.0s) exceeded
 
-('starting', 'write')
-
-**********************************************************************
-
-Test write
-write then read one block
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test write FAILED
- (write then read one block)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'stat')
-
-**********************************************************************
-
-Test stat
-stat a regular file
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test stat FAILED
- (stat a regular file)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'overwrite')
-
-**********************************************************************
-
-Test overwrite
-overwrite a block
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test overwrite FAILED
- (overwrite a block)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'maxfile')
-
-**********************************************************************
-
-Test maxfile
-write largest possible file
-
-**********************************************************************
-total blocks        39
-  inodes            128 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test maxfile FAILED
- (write largest possible file)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'maxfile2')
-
-**********************************************************************
-
-Test maxfile2
-write more blocks than possible
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test maxfile2 FAILED
- (write more blocks than possible)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'dir1')
-
-**********************************************************************
-
-Test dir1
-check root for dot entries
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test dir1 FAILED
- (check root for dot entries)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'dir2')
-
-**********************************************************************
-
-Test dir2
-create a new directory and check it
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test dir2 FAILED
- (create a new directory and check it)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'baddir')
-
-**********************************************************************
-
-Test baddir
-try to create a file with a file parent inode
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test baddir FAILED
- (try to create a file with a file parent inode)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'baddir2')
-
-**********************************************************************
-
-Test baddir2
-try to lookup a file with a file parent inode
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test baddir2 FAILED
- (try to lookup a file with a file parent inode)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'unlink')
-
-**********************************************************************
-
-Test unlink
-unlink a file
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test unlink FAILED
- (unlink a file)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'unlink2')
-
-**********************************************************************
-
-Test unlink2
-unlink a directory
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test unlink2 FAILED
- (unlink a directory)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'empty')
-
-**********************************************************************
-
-Test empty
-unlink a non-empty directory
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test empty FAILED
- (unlink a non-empty directory)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'name')
-
-**********************************************************************
-
-Test name
-name too long
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test name FAILED
- (name too long)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'persist')
-
-**********************************************************************
-
-Test persist
-restart server after creating a file
-
-**********************************************************************
-total blocks        36
-  inodes            32 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test persist FAILED
- (restart server after creating a file)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'bigdir')
-
-**********************************************************************
-
-Test bigdir
-create a directory with 126 files
-
-**********************************************************************
-total blocks        39
-  inodes            128 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test bigdir FAILED
- (create a directory with 126 files)
- libmfs should export fucntion 'MFS_Init'
-
-('starting', 'deep')
-
-**********************************************************************
-
-Test deep
-create many deeply nested directories
-
-**********************************************************************
-total blocks        39
-  inodes            128 [size of each: 128]
-  data blocks       32
-layout details
-  inode bitmap address/len 1 [1]
-  data bitmap address/len  2 [1]
-Failure: libmfs should export fucntion 'MFS_Init'
-
-
-test deep FAILED
- (create many deeply nested directories)
- libmfs should export fucntion 'MFS_Init'
-
-**********************************************************************
-Summary:
-test build PASSED
- (build project using make)
-
-test shutdown FAILED
- (init server and client then call shutdown)
- libmfs should export fucntion 'MFS_Init'
-
-test creat FAILED
- (creat a file and check with lookup)
- libmfs should export fucntion 'MFS_Init'
-
-test write FAILED
- (write then read one block)
- libmfs should export fucntion 'MFS_Init'
-
-test stat FAILED
- (stat a regular file)
- libmfs should export fucntion 'MFS_Init'
-
-test overwrite FAILED
- (overwrite a block)
- libmfs should export fucntion 'MFS_Init'
-
-test maxfile FAILED
- (write largest possible file)
- libmfs should export fucntion 'MFS_Init'
-
-test maxfile2 FAILED
- (write more blocks than possible)
- libmfs should export fucntion 'MFS_Init'
-
-test dir1 FAILED
- (check root for dot entries)
- libmfs should export fucntion 'MFS_Init'
-
-test dir2 FAILED
- (create a new directory and check it)
- libmfs should export fucntion 'MFS_Init'
-
-test baddir FAILED
- (try to create a file with a file parent inode)
- libmfs should export fucntion 'MFS_Init'
-
-test baddir2 FAILED
- (try to lookup a file with a file parent inode)
- libmfs should export fucntion 'MFS_Init'
-
-test unlink FAILED
- (unlink a file)
- libmfs should export fucntion 'MFS_Init'
-
-test unlink2 FAILED
- (unlink a directory)
- libmfs should export fucntion 'MFS_Init'
-
-test empty FAILED
- (unlink a non-empty directory)
- libmfs should export fucntion 'MFS_Init'
-
-test name FAILED
- (name too long)
- libmfs should export fucntion 'MFS_Init'
-
-test persist FAILED
- (restart server after creating a file)
- libmfs should export fucntion 'MFS_Init'
-
-test bigdir FAILED
- (create a directory with 126 files)
- libmfs should export fucntion 'MFS_Init'
-
-test deep FAILED
- (create many deeply nested directories)
- libmfs should export fucntion 'MFS_Init'
-
-Passed 1 of 19 tests.
-Overall 1 of 19
+Skipped 16 tests.
+To keep testing after failing a test, use flag '-c' or '--continue'
