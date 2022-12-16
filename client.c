@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "udp.h"
-
+#include "mfs.c"
 #define BUFFER_SIZE (1000)
 
 // client code
@@ -17,11 +17,12 @@ int main(int argc, char *argv[]) {
     }
     else if (strcmp(func,"MFS_Lookup") == 0)
     {
+        
         /* code */
     }
     else if (strcmp(func,"MFS_Shutdown") == 0)
     {
-         MFS_Shutdown();
+       //  MFS_Shutdown();
     }
     
     

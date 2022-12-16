@@ -8,12 +8,10 @@
 
 #define DIRECT_PTRS (30)
 
-#define INODE_SIZE (128)
-
 typedef struct {
     int type;   // MFS_DIRECTORY or MFS_REGULAR
     int size;   // bytes
-    unsigned int direct[DIRECT_PTRS];     //direct pointer, each pointer will refer to one data block
+    unsigned int direct[DIRECT_PTRS];
 } inode_t;
 
 typedef struct {
@@ -31,10 +29,9 @@ typedef struct __super {
     int inode_region_len;  // in blocks
     int data_region_addr;  // block address (in blocks)
     int data_region_len;   // in blocks
+    int num_inodes;        // just the number of inodes
+    int num_data;          // and data blocks...
 } super_t;
 
 
 #endif // __ufs_h__
-
-
-

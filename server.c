@@ -21,8 +21,8 @@ int fd;
 struct sockaddr_in *addr;
 
 super_t superBlock;
-int iMapStartPosition;
-int dMapStartPosition;
+unsigned int iMapStartPosition;
+unsigned int dMapStartPosition;
 int inodeStartPosition;
 int dataStartPosition;
 
@@ -50,19 +50,20 @@ void set_bit(unsigned int *bitmap, int position) {
 
 
 
-void lookup(int pinum, char *name){
+int lookup(int pinum, char *name){
     Msg reply;
     reply.inum = -1;
     reply.requestType = 9; // type is reply
     // pinode in the bitmap(in block number)
-    int pinumBlock = superBlock.inode_region_addr + (pinum * INODE_SIZE) / UFS_BLOCK_SIZE; 
+    int pinumBlock = superBlock.inode_region_addr + (pinum * sizeof(inode_t)) / UFS_BLOCK_SIZE; 
     // pinode array position(in address)
-    int pinumPosition = inodeStartPosition + pinum * INODE_SIZE;
+    int pinumPosition = inodeStartPosition + pinum * sizeof(inode_t);
 
     //check inode bitmap
-    if(get_bit((unsigned int *) iMapStartPosition, pinumBlock) == 0){
+    unsigned int iMapStartPos = (unsigned int)iMapStartPosition;
+    if(get_bit(&iMapStartPos, pinumBlock) == 0){
         reply.inum = -1;
-    } 
+    }
     else{
         //check inode type
         inode_t pinode;
@@ -82,13 +83,14 @@ void lookup(int pinum, char *name){
                 // int dirEntryBlockAddr = dataStartPosition + dirEntryBlock * UFS_BLOCK_SIZE;
                 lseek(fd, dirEntryBlockAddr, SEEK_SET);
                 char* entryBlock = malloc(UFS_BLOCK_SIZE);
-                read(fd, &entryBlock, UFS_BLOCK_SIZE);
+                read(fd, entryBlock, UFS_BLOCK_SIZE);
                 dir_ent_t* dirEntry;
                 for(int j = 0; j < UFS_BLOCK_SIZE / sizeof(dir_ent_t); j++){
-                    dirEntry = entryBlock + j * sizeof(dir_ent_t);
+                    dirEntry = (dir_ent_t*)(entryBlock + j * sizeof(dir_ent_t));
                     if(dirEntry->inum != -1){
                         if(strcmp(dirEntry->name, name) == 0){
                             reply.inum =  dirEntry->inum;
+                            return dirEntry->inum;
                         }
                     }
                 }
@@ -96,7 +98,8 @@ void lookup(int pinum, char *name){
         }
     }
 
-    int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    return -1;
     
 }
 
@@ -105,12 +108,12 @@ int FS_Stat(int inum, MFS_Stat_t *m){
     reply.inum = -1;
     reply.requestType = 9; // type is reply
     // pinode in the bitmap(in block number)
-    int inumBlock = superBlock.inode_region_addr + (inum * INODE_SIZE) / UFS_BLOCK_SIZE; 
+    int inumBlock = superBlock.inode_region_addr + (inum * sizeof(inode_t)) / UFS_BLOCK_SIZE; 
     // pinode array position(in address)
-    int inumPosition = inodeStartPosition + inum * INODE_SIZE;
+    int inumPosition = inodeStartPosition + inum * sizeof(inode_t);
 
     //check inode bitmap
-    if(get_bit((unsigned int *) iMapStartPosition, inumBlock) == 0){
+    if(get_bit(&iMapStartPosition, inumBlock) == 0){
         reply.inum = -1;
     } 
     else{
@@ -124,44 +127,158 @@ int FS_Stat(int inum, MFS_Stat_t *m){
         reply.stat->type = inode.type;
     }
     int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    return rc;
 }
 
 int FS_Write(int inum, char *buffer, int offset, int nbytes){
-
+return -1;
 }
 
-int FS_Read(int inum, char *buffer, int offset, int nbytes){
+//TODO: Do UDP write after writing to buffer and send reply
 
-int inumBlock = superBlock.inode_bitmap_addr + (inum * INODE_SIZE)/UFS_BLOCK_SIZE;
-int inumPos = (INODE_SIZE * inum) +inodeStartPosition;
-if(get_bit(iMapStartPosition,inumBlock) != 1) 
+int FS_Read(int inum, char *buffer, int offset, int nbytes)
+{
+
+Msg reply;
+int inumBlock = superBlock.inode_bitmap_addr + (inum * sizeof(inode_t))/UFS_BLOCK_SIZE;
+int inumPos = (sizeof(inode_t) * inum) +inodeStartPosition;
+if(get_bit(&iMapStartPosition,inumBlock) != 1) {
+reply.requestType = -1;
+UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
 return -1;
-
+}
 inode_t inode;
-
+// Msg reply;
 lseek(fd,inumPos,SEEK_SET);
 read(fd,&inode, sizeof(inode_t));
-if(inode.type == UFS_DIRECTORY){
+// if(inode.type == UFS_DIRECTORY){
     //READ DIR CONTENTS
-    if(nbytes % sizeof(dir_ent_t) != 0 ){
+    
+    if( (inode.type = MFS_DIRECTORY) && (nbytes % sizeof(dir_ent_t) != 0 || offset % sizeof(dir_ent_t) != 0)){
+        reply.requestType = -1;
+        UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
         return -1;
     }
+
+    int dataBlock = offset/UFS_BLOCK_SIZE;
+    //int offsetRemaining = 0;
+    int nbytes1 =0;
+    if(offset%UFS_BLOCK_SIZE >= nbytes){
+    int nbytes1 = (inode.direct[dataBlock+1] - offset); //no of bytes to read in first block
+    nbytes = nbytes - nbytes1;
+    }
+    if(inode.direct[dataBlock] == -1 || offset>inode.size){
+        reply.requestType = -1;
+        UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+        return -1;
+    }
+    if(nbytes1 ){
+    //figure out how to read into buffer at buffer+remaining
+    lseek(fd,dataStartPosition+inode.direct[dataBlock],SEEK_SET);
+    read(fd,&buffer,nbytes1);
+    lseek(fd,dataStartPosition+inode.direct[dataBlock+1],SEEK_SET);
+    read(fd,&buffer+nbytes1,nbytes);
+    strncpy(reply.buffer,buffer,nbytes+nbytes+1);
+    return 1;
+    }
+    else{
+        lseek(fd,dataStartPosition+inode.direct[dataBlock],SEEK_SET);
+        read(fd,&buffer,nbytes);
+        strncpy(reply.buffer,buffer,nbytes+nbytes+1);
+        return 1;
+    }
+
     
-}
+//}
 
-else{
-    //READ FILE CONTENTS INTO buffer
-}
+// else{
+//     //READ FILE CONTENTS INTO buffer
+//     int dataBlock = offset/UFS_BLOCK_SIZE;
+//     //int offsetRemaining = 0;
+//     int nbytes1 =0;
+//     if(offset%UFS_BLOCK_SIZE != 0){
+//     int nbytes1 = (inode.direct[dataBlock+1] - offset); //no of bytes to read in first block
+//     nbytes = nbytes - nbytes1;
+//     }
+//     if(inode.direct[dataBlock] == -1 || offset>inode.size){
+//         reply.requestType = -1;
+//         int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+//         return -1;
+//     }
+//     if(nbytes1 ){
+//     //figure out how to read into buffer at buffer+remaining
+//     lseek(fd,dataStartPosition+inode.direct[dataBlock],SEEK_SET);
+//     read(fd,&buffer,nbytes1);
+//     lseek(fd,dataStartPosition+inode.direct[dataBlock+1],SEEK_SET);
+//     buffer = buffer+nbytes1;
+//     read(fd,&buffer+nbytes1,nbytes);
+//     strncpy(reply.buffer,buffer,nbytes+nbytes+1);
+//     return 1;
+//     }
+//     else{
+//         lseek(fd,dataStartPosition+inode.direct[dataBlock],SEEK_SET);
+//         read(fd,&buffer,nbytes);
+//         strncpy(reply.buffer,buffer,nbytes+nbytes+1);
+//         return 1;
+//     }
 
+// }
+
+//int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
 
 }
 
 int FS_Creat(int pinum, int type, char *name){
-
+return -1;
 }
 
-int FS_Unlink(int pinum, char *name){
+int FS_Unlink(int pinum, char *name)
+{
+    Msg reply;
+    reply.requestType = -1;
+    unsigned int bitmapAddr = (unsigned int)superBlock.inode_bitmap_addr;
+if(get_bit(&bitmapAddr,pinum) != 1){
+    int rc = UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    fsync(fd);
+    return rc;
+}
+int inodePos = inodeStartPosition+ (pinum*sizeof(inode_t));
+inode_t inode;
+lseek(fd,inodePos,SEEK_SET);
+read(fd,&inode,sizeof(inode_t));
+if(inode.type == MFS_REGULAR_FILE){
+    reply.requestType = 1;
+    unsigned int inodeBitmapAddr = (unsigned int)superBlock.inode_bitmap_addr;
+    set_bit(&inodeBitmapAddr,pinum);
+    fsync(fd);
+    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    return 1;
+    
+}
+else{
+    int inum = lookup(pinum,name);
+    if(inum == -1){
+    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    fsync(fd);
+    return -1;
+    }
+    int dirPos = inodeStartPosition+ (inum*sizeof(inode_t));
+    inode_t dirInode;
+    lseek(fd,dirPos,SEEK_SET);
+    read(fd,&dirInode,sizeof(inode_t));
+    if(dirInode.direct[0] != -1){
+    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    fsync(fd);
+    return -1;
+    }
+    reply.requestType = 1;
+    unsigned int inodeBitmapAddr = (unsigned int)superBlock.inode_bitmap_addr;
+    set_bit(&inodeBitmapAddr,inum);
+    UDP_Write(sd, addr, (char*)&reply, sizeof(Msg));
+    fsync(fd);
+    return 1;
 
+}
 }
     
 
@@ -194,16 +311,17 @@ int fsInit(char* img){
 int startServer(int port, char* img){
     sd = UDP_Open(port);
     assert(sd > -1);
-    char *src, *dst;
-    struct stat statbuf;
+    //char *src, *dst;
+    //struct stat statbuf;
 
     if(fsInit(img) < 0) return -1;
 
     while (1) {
         Msg* request = malloc(sizeof(Msg));
         printf("server:: waiting...\n");
-        int rc = UDP_Read(sd, addr, request, sizeof(Msg));
-        printf("server:: read message [size:%d contents:(%s)]\n", rc, request);
+        int rc = UDP_Read(sd, addr, (char*)request, sizeof(Msg));
+        //int responseRet;
+        printf("server:: read message [size:%d contents:(%s)]\n", rc, (char*)request);
         if (rc > 0) {
             switch (request->requestType)
             {
@@ -219,7 +337,7 @@ int startServer(int port, char* img){
                 FS_Write(request->inum,request->buffer,request->offset,request -> nbytes);
                 break;
             case 5:
-                FS_Read(request->inum,request->buffer,request->offset,request -> nbytes);
+             FS_Read(request->inum,request->buffer,request->offset,request -> nbytes);
                 break;
             case 6:
                 FS_Creat(request ->inum,request->type,request->name);
