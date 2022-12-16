@@ -142,9 +142,11 @@ inode_t inode;
 lseek(fd,inumPos,SEEK_SET);
 read(fd,&inode, sizeof(inode_t));
 if(inode.type == UFS_DIRECTORY){
-    //READ DIR CONTENTS INTO mfs_dir pointer
+    //READ DIR CONTENTS
+    if(nbytes % sizeof(dir_ent_t) != 0 ){
+        return -1;
+    }
     
-
 }
 
 else{
