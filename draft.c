@@ -52,3 +52,33 @@ int mfs_create(int pinum, int type, char *name) {
     }
     return 0;
 }
+
+
+
+
+
+int mfs_lookup(int pinum, char* name) {
+    if(pinum<0 || pinum>=metaAddr->num_inodes) { // invalid pinum
+        return -1;
+    }
+
+    if(inode_region[pinum].type!=MFS_DIRECTORY) {
+        return -1;
+    }
+    
+    for(int i = 0; i<DIRECT_PTRS; i++) {
+        if(inode_region[pinum].direct[i] == -1) {
+            continue;
+        }
+        int data_ptr = inode_region[pinum].direct[i] - metaAddr->data_region_addr;
+
+        for(int j = 0; j<128; j++) {
+            dir_ent_t entry = data_region[data_ptr].entries[j];
+
+            if(strcmp(entry.name, name) == 0){
+                return entry.inum;
+            }
+        }
+    }
+    return -1;
+}

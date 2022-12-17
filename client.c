@@ -24,15 +24,21 @@ int main(int argc, char *argv[]) {
         MFS_Init("localhost", 2343);
     }
     if(strcmp(request, "2") == 0){
-        printf("request2\n");
-        MFS_Lookup(2, "test");
+        printf("request lookup\n");
+        int rc = MFS_Lookup(10, "test");
+        printf("return value: %d\n", rc);
     }
     if(strcmp(request, "3") == 0){
         printf("request stat\n");
         MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
-        MFS_Stat(20, m);
+        int rc = MFS_Stat(20, m);
+        printf("return value: %d\n", rc);
         printf("size: %d \n", m->size);
         printf("type: %d \n", m->type);
+    }
+    if(strcmp(request, "6") == 0){
+        printf("request create\n");
+        MFS_Creat(10, 0, "a");
     }
     if(strcmp(request, "8") == 0){
         printf("request8\n");
