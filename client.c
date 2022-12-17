@@ -25,13 +25,13 @@ int main(int argc, char *argv[]) {
     }
     if(strcmp(request, "2") == 0){
         printf("request lookup\n");
-        int rc = MFS_Lookup(10, "test");
+        int rc = MFS_Lookup(0, "test");
         printf("return value: %d\n", rc);
     }
     if(strcmp(request, "3") == 0){
         printf("request stat\n");
         MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
-        int rc = MFS_Stat(20, m);
+        int rc = MFS_Stat(atoi(argv[2]), m);
         printf("return value: %d\n", rc);
         printf("size: %d \n", m->size);
         printf("type: %d \n", m->type);

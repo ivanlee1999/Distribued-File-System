@@ -28,13 +28,13 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8609
-/tmp/tmpB8qI96/p/server 8609 /home/yifanli/CS537/project4/test.img
+Starting server on port 9817
+/tmp/tmpNRh7bp/p/server 9817 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 8609 
-start address 0x7f18fd235000
-imap address 0x7f18fd236000
+server port 9817 
+start address 0x7f85edf36000
+imap address 0x7f85edf37000
 inode_bitmap_len : 1
 data_bitmap_len : 1
 inode_region_len : 1
@@ -45,7 +45,7 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 shutdown!
 MFS Init
-open mfs portnumbrt 35454
+open mfs portnumbrt 39795
 MFS Shutdown
 waiting for response
 client:: got reply [size:1000 contents:(0)
@@ -68,13 +68,13 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6664
-/tmp/tmpB8qI96/p/server 6664 /home/yifanli/CS537/project4/test.img
+Starting server on port 7136
+/tmp/tmpNRh7bp/p/server 7136 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 6664 
-start address 0x7f447b520000
-imap address 0x7f447b521000
+server port 7136 
+start address 0x7f31af713000
+imap address 0x7f31af714000
 inode_bitmap_len : 1
 data_bitmap_len : 1
 inode_region_len : 1
@@ -85,10 +85,10 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 freeInodeNum : 1
 pinode->direct[0] : 4
-start address : 0x7f447b520000
- direntry : 0x7f447b524000, entry inum : 0
- direntry : 0x7f447b524020, entry inum : 0
- direntry : 0x7f447b524040, entry inum : -1
+start address : 0x7f31af713000
+ direntry : 0x7f31af717000, entry inum : 0
+ direntry : 0x7f31af717020, entry inum : 0
+ direntry : 0x7f31af717040, entry inum : -1
 imap value 1
 finish creating regular file
 server:: waiting...
@@ -98,8 +98,8 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 shutdown!
 MFS Init
-open mfs portnumbrt 35454
-MFS create
+open mfs portnumbrt 39795
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -127,11 +127,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 9432
-/tmp/tmpB8qI96/p/server 9432 /home/yifanli/CS537/project4/test.img
+Starting server on port 9071
+/tmp/tmpNRh7bp/p/server 9071 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 32233
-MFS create
+open mfs portnumbrt 38318
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -161,25 +161,28 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6737
-/tmp/tmpB8qI96/p/server 6737 /home/yifanli/CS537/project4/test.img
+Starting server on port 6926
+/tmp/tmpNRh7bp/p/server 6926 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 32233
-MFS create
+open mfs portnumbrt 38318
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
 waiting for response
 client:: got reply [size:1000 contents:(	)
-MFS Sata
+MFS Stata : inum : 0
 waiting for response
 client:: got reply [size:1000 contents:(	)
-Failure: MFS_Stat returned failure inum=0
+MFS Stata : inum : 1
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: Stat gave wrong type
 
 
 test stat FAILED
  (stat a regular file)
- MFS_Stat returned failure inum=0
+ Stat gave wrong type
 
 ('starting', 'overwrite')
 
@@ -195,11 +198,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5423
-/tmp/tmpB8qI96/p/server 5423 /home/yifanli/CS537/project4/test.img
+Starting server on port 9804
+/tmp/tmpNRh7bp/p/server 9804 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 32233
-MFS create
+open mfs portnumbrt 23152
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -229,11 +232,11 @@ total blocks        39
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 7984
-/tmp/tmpB8qI96/p/server 7984 /home/yifanli/CS537/project4/test.img
+Starting server on port 9071
+/tmp/tmpNRh7bp/p/server 9071 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 20730
-MFS create
+open mfs portnumbrt 23152
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -263,11 +266,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 7119
-/tmp/tmpB8qI96/p/server 7119 /home/yifanli/CS537/project4/test.img
+Starting server on port 5709
+/tmp/tmpNRh7bp/p/server 5709 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 20730
-MFS create
+open mfs portnumbrt 23152
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -298,13 +301,13 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8957
-/tmp/tmpB8qI96/p/server 8957 /home/yifanli/CS537/project4/test.img
+Starting server on port 7241
+/tmp/tmpNRh7bp/p/server 7241 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 8957 
-start address 0x7fd45e8f7000
-imap address 0x7fd45e8f8000
+server port 7241 
+start address 0x7fcd3a748000
+imap address 0x7fcd3a749000
 inode_bitmap_len : 1
 data_bitmap_len : 1
 inode_region_len : 1
@@ -321,7 +324,7 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 shutdown!
 MFS Init
-open mfs portnumbrt 20730
+open mfs portnumbrt 23152
 MFS lookup
 waiting for response
 client:: got reply [size:1000 contents:(	)
@@ -350,11 +353,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 7668
-/tmp/tmpB8qI96/p/server 7668 /home/yifanli/CS537/project4/test.img
+Starting server on port 9202
+/tmp/tmpNRh7bp/p/server 9202 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 20730
-MFS create
+open mfs portnumbrt 23152
+MFS create, pinum: 0, type: 0, name: testdir
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -381,13 +384,13 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8557
-/tmp/tmpB8qI96/p/server 8557 /home/yifanli/CS537/project4/test.img
+Starting server on port 8971
+/tmp/tmpNRh7bp/p/server 8971 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 8557 
-start address 0x7fdd80440000
-imap address 0x7fdd80441000
+server port 8971 
+start address 0x7efcbad69000
+imap address 0x7efcbad6a000
 inode_bitmap_len : 1
 data_bitmap_len : 1
 inode_region_len : 1
@@ -398,10 +401,10 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 freeInodeNum : 1
 pinode->direct[0] : 4
-start address : 0x7fdd80440000
- direntry : 0x7fdd80444000, entry inum : 0
- direntry : 0x7fdd80444020, entry inum : 0
- direntry : 0x7fdd80444040, entry inum : -1
+start address : 0x7efcbad69000
+ direntry : 0x7efcbad6d000, entry inum : 0
+ direntry : 0x7efcbad6d020, entry inum : 0
+ direntry : 0x7efcbad6d040, entry inum : -1
 imap value 1
 finish creating regular file
 server:: waiting...
@@ -413,14 +416,14 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 shutdown!
 MFS Init
-open mfs portnumbrt 34472
-MFS create
+open mfs portnumbrt 36868
+MFS create, pinum: 0, type: 1, name: testdir
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
 waiting for response
 client:: got reply [size:1000 contents:(	)
-MFS create
+MFS create, pinum: 1, type: 1, name: testfile
 waiting for response
 client:: got reply [size:1000 contents:(	)
 MFS Shutdown
@@ -445,13 +448,13 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8261
-/tmp/tmpB8qI96/p/server 8261 /home/yifanli/CS537/project4/test.img
+Starting server on port 7098
+/tmp/tmpNRh7bp/p/server 7098 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 8261 
-start address 0x7f672c627000
-imap address 0x7f672c628000
+server port 7098 
+start address 0x7fd534e3e000
+imap address 0x7fd534e3f000
 inode_bitmap_len : 1
 data_bitmap_len : 1
 inode_region_len : 1
@@ -462,10 +465,10 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 freeInodeNum : 1
 pinode->direct[0] : 4
-start address : 0x7f672c627000
- direntry : 0x7f672c62b000, entry inum : 0
- direntry : 0x7f672c62b020, entry inum : 0
- direntry : 0x7f672c62b040, entry inum : -1
+start address : 0x7fd534e3e000
+ direntry : 0x7fd534e42000, entry inum : 0
+ direntry : 0x7fd534e42020, entry inum : 0
+ direntry : 0x7fd534e42040, entry inum : -1
 imap value 1
 finish creating regular file
 server:: waiting...
@@ -479,8 +482,8 @@ server:: waiting...
 server:: read message [size:1000 contents:()]
 shutdown!
 MFS Init
-open mfs portnumbrt 34472
-MFS create
+open mfs portnumbrt 36868
+MFS create, pinum: 0, type: 1, name: testdir
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -511,11 +514,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 9504
-/tmp/tmpB8qI96/p/server 9504 /home/yifanli/CS537/project4/test.img
+Starting server on port 8859
+/tmp/tmpNRh7bp/p/server 8859 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 34472
-MFS create
+open mfs portnumbrt 36868
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -545,11 +548,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5403
-/tmp/tmpB8qI96/p/server 5403 /home/yifanli/CS537/project4/test.img
+Starting server on port 7332
+/tmp/tmpNRh7bp/p/server 7332 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 34472
-MFS create
+open mfs portnumbrt 36868
+MFS create, pinum: 0, type: 0, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -579,11 +582,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 7900
-/tmp/tmpB8qI96/p/server 7900 /home/yifanli/CS537/project4/test.img
+Starting server on port 6916
+/tmp/tmpNRh7bp/p/server 6916 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 36770
-MFS create
+open mfs portnumbrt 30593
+MFS create, pinum: 0, type: 0, name: testdir
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -610,11 +613,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5931
-/tmp/tmpB8qI96/p/server 5931 /home/yifanli/CS537/project4/test.img
+Starting server on port 6234
+/tmp/tmpNRh7bp/p/server 6234 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 36770
-MFS create
+open mfs portnumbrt 30593
+MFS create, pinum: 0, type: 1, name: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 waiting for response
 client:: got reply [size:1000 contents:(0)
 Failure: Name argument too long did not result in failure
@@ -638,11 +641,11 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6062
-/tmp/tmpB8qI96/p/server 6062 /home/yifanli/CS537/project4/test.img
+Starting server on port 7106
+/tmp/tmpNRh7bp/p/server 7106 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 36770
-MFS create
+open mfs portnumbrt 30593
+MFS create, pinum: 0, type: 1, name: test
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -672,11 +675,11 @@ total blocks        39
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 9320
-/tmp/tmpB8qI96/p/server 9320 /home/yifanli/CS537/project4/test.img
+Starting server on port 6036
+/tmp/tmpNRh7bp/p/server 6036 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 36770
-MFS create
+open mfs portnumbrt 25565
+MFS create, pinum: 0, type: 0, name: testdir
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -703,11 +706,11 @@ total blocks        39
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8059
-/tmp/tmpB8qI96/p/server 8059 /home/yifanli/CS537/project4/test.img
+Starting server on port 6263
+/tmp/tmpNRh7bp/p/server 6263 /home/yifanli/CS537/project4/test.img
 MFS Init
-open mfs portnumbrt 36759
-MFS create
+open mfs portnumbrt 25565
+MFS create, pinum: 0, type: 0, name: testdir
 waiting for response
 client:: got reply [size:1000 contents:(0)
 MFS lookup
@@ -737,7 +740,7 @@ test write FAILED
 
 test stat FAILED
  (stat a regular file)
- MFS_Stat returned failure inum=0
+ Stat gave wrong type
 
 test overwrite FAILED
  (overwrite a block)

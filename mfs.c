@@ -84,7 +84,7 @@ int MFS_Lookup(int pinum, char* name){
 }
 
 int MFS_Stat(int inum, MFS_Stat_t *m){
-     printf("MFS Sata\n");
+     printf("MFS Stata : inum : %d\n", inum);
     Msg request,response;
     response.type = 9;
     response.inum = -2;
@@ -128,7 +128,7 @@ int MFS_Read(int inum, char *buffer, int offset, int nbytes){
 }         //5
 
 int MFS_Creat(int pinum, int type, char *name){
-    printf("MFS create\n");
+    printf("MFS create, pinum: %d, type: %d, name: %s\n", pinum, type, name);
     Msg request,response;
     response.type = 9;
     response.inum = -2;

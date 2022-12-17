@@ -170,11 +170,12 @@ int FS_Stat(int inum, MFS_Stat_t *m){
     reply.requestType = 9; // type is reply
     // pinode in the bitmap(in block number)
     int inumBlock = superBlock.inode_region_addr + (inum * sizeof(inode_t)) / UFS_BLOCK_SIZE; 
+    printf("inumBlock %d\n", inumBlock);
     // pinode array position(in address)
     int inumPosition = inodeStartPosition + inum * sizeof(inode_t);
 
     //check inode bitmap
-    if(get_bit(&iMapStartPosition, inumBlock) == 0){
+    if(get_bit((unsigned int *)imapAddress, inum) == 0){
         reply.inum = -1;
         reply.stat.size = -1;
         reply.stat.type = -1;
@@ -341,7 +342,7 @@ int FS_Creat(int pinum, int type, char *name){
     //get newest freeinode
     int freeInodeNum = findFreeInode();
     printf("freeInodeNum : %d\n", freeInodeNum);
-    inode_t* freeInode = malloc(sizeof(inode_t));
+    inode_t* freeInode;
     // freeInode = (inode_t*)(startAddress + sb->inode_region_addr * freeInodeNum);
     freeInode = (inode_t*) (inodeBlockAddress + freeInodeNum * sizeof(inode_t));
     
