@@ -70,7 +70,7 @@ int MFS_Init(char *hostname, int port){
 
 
 int MFS_Lookup(int pinum, char* name){
-    printf("MFS lookup\n");
+    printf("MFS lookup pinum : %d, name: %s\n", pinum, name);
     Msg request;
     Msg response;
     response.type = 9;

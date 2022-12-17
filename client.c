@@ -23,11 +23,13 @@ int main(int argc, char *argv[]) {
         printf("request1\n");
         MFS_Init("localhost", 2343);
     }
+
     if(strcmp(request, "2") == 0){
         printf("request lookup\n");
-        int rc = MFS_Lookup(0, "test");
+        int rc = MFS_Lookup(atoi(argv[2]), "testdir");
         printf("return value: %d\n", rc);
     }
+
     if(strcmp(request, "3") == 0){
         printf("request stat\n");
         MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
@@ -36,12 +38,16 @@ int main(int argc, char *argv[]) {
         printf("size: %d \n", m->size);
         printf("type: %d \n", m->type);
     }
+
     if(strcmp(request, "6") == 0){
         printf("request create\n");
-        MFS_Creat(0, 1, "test");
-        int rc = MFS_Lookup(0, "test");
+        MFS_Creat(0, 0, "makedir");
+        int rc = MFS_Lookup(0, "makedir");
+        printf("return value: %d\n", rc);
+        rc = MFS_Lookup(1, ".");
         printf("return value: %d\n", rc);
     }
+
     if(strcmp(request, "8") == 0){
         printf("request8\n");
         MFS_Shutdown();

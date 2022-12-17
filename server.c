@@ -101,11 +101,14 @@ int lookup(int pinum, char *name){
 
     for(int i = 0; i < DIRECT_PTRS; i++){
         if(pinode->direct[i] != -1){
-            // printf("test\n");
-            dir_ent_t* entryAddr =  (dir_ent_t*) (startAddress +  (pinode->direct[i] * UFS_BLOCK_SIZE));
+            // printf("test %d\n", i);
             for(int j = 0; j < 128; j++){
-                if(strcmp((entryAddr+j)->name, name) == 0){
-                    reply.inum = (entryAddr+j)->inum;
+                dir_ent_t* entryAddr =  (dir_ent_t*) (startAddress +  (pinode->direct[i] * UFS_BLOCK_SIZE) + j * sizeof(dir_ent_t));
+                printf(" direntry : %p, entry inum : %d, name : %s\n", entryAddr, entryAddr->inum, entryAddr->name);
+                // char* entryName = (entryAddr+j)->name;
+                // printf("name : %s, name should find %s\n", entryName, name);
+                if(strcmp((entryAddr)->name, name) == 0){
+                    reply.inum = (entryAddr)->inum;
                     UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
                     return -1;
                 }
@@ -172,7 +175,7 @@ int FS_Stat(int inum, MFS_Stat_t *m){
     int inumBlock = superBlock.inode_region_addr + (inum * sizeof(inode_t)) / UFS_BLOCK_SIZE; 
     printf("inumBlock %d\n", inumBlock);
     // pinode array position(in address)
-    int inumPosition = inodeStartPosition + inum * sizeof(inode_t);
+    // int inumPosition = inodeStartPosition + inum * sizeof(inode_t);
 
     //check inode bitmap
     if(get_bit((unsigned int *)imapAddress, inum) == 0){
@@ -185,14 +188,15 @@ int FS_Stat(int inum, MFS_Stat_t *m){
     } 
     else{
         //check inode type
-        inode_t inode;
+        inode_t* inode;
+        inode = getpinode(inum);
         //move read pointer to the position, SEEK_SET  means starting from the beginning
-        lseek(fd, inumPosition, SEEK_SET);
-        read(fd, &inode, sizeof(inode_t));
+        // lseek(fd, inumPosition, SEEK_SET);
+        // read(fd, &inode, sizeof(inode_t));
         reply.inum = 0;
         // reply.stat = malloc(sizeof(MFS_Stat_t));
-        reply.stat.size = inode.size;
-        reply.stat.type = inode.type;
+        reply.stat.size = inode->size;
+        reply.stat.type = inode->type;
     }
     int rc = UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
     printf("finished sending stat\n");
@@ -350,7 +354,7 @@ int FS_Creat(int pinum, int type, char *name){
     //get the datablock of directory
     printf("pinode->direct[0] : %d\n", pinode->direct[0]);
     printf("start address : %p\n", startAddress);
-    dir_ent_t*  pinodeDataBlockAddress = (dir_ent_t*) (startAddress + (int)(pinode->direct[0]) * UFS_BLOCK_SIZE);
+    dir_ent_t*  pinodeDataBlockAddress = (dir_ent_t*) (startAddress + (pinode->direct[0]) * UFS_BLOCK_SIZE);
 
     for(int i = 0; i< UFS_BLOCK_SIZE/sizeof(dir_ent_t); i++) {
         // int entryAddress = pinodeDataBlockAddress + sizeof(dir_ent_t) * i;
@@ -363,7 +367,11 @@ int FS_Creat(int pinum, int type, char *name){
         printf(" direntry : %p, entry inum : %d\n", dirEntry, dirEntry->inum);
         if(dirEntry->inum == -1){
             dirEntry->inum = freeInodeNum;
-            strcpy(dirEntry->name, name);
+            // strcpy(dirEntry->name, name);
+            for(int z = 0; z != 28; z++){
+                dirEntry->name[z] = *(name+z);
+            }
+            printf("create file name : %s\n", dirEntry->name);
             set_bit((unsigned int *)imapAddress, freeInodeNum);
             printf("imap value %d\n", get_bit((unsigned int *)imapAddress, 1));
             pinode->size += sizeof(dir_ent_t);
@@ -385,8 +393,10 @@ int FS_Creat(int pinum, int type, char *name){
     else if(type == MFS_DIRECTORY){
         int newDataBlockNum = findFreeDataBlock();
         freeInode->direct[0] = newDataBlockNum;
+        printf("new free data block number %d\n", newDataBlockNum);
         dir_ent_t* allDirEntryInsideBlock;
-        allDirEntryInsideBlock =(dir_ent_t*) (dataBlockAddress + newDataBlockNum * sizeof(UFS_BLOCK_SIZE/ sizeof(dir_ent_t)));
+        allDirEntryInsideBlock =(dir_ent_t*) (startAddress + newDataBlockNum * UFS_BLOCK_SIZE);
+        printf("create direntry address %p\n", allDirEntryInsideBlock);
         //set '.' and '..'
         strcpy(allDirEntryInsideBlock->name, ".");
         strcpy((allDirEntryInsideBlock+1)->name, "..");
@@ -396,8 +406,11 @@ int FS_Creat(int pinum, int type, char *name){
         for(int i = 2; i<UFS_BLOCK_SIZE/sizeof(dir_ent_t); i++) {
             (allDirEntryInsideBlock+i)->inum = -1;
         }
-        set_bit((unsigned int *)dataBlockAddress, newDataBlockNum);
-            printf("finish creating directory\n");
+        set_bit((unsigned int *)dmapAddress, newDataBlockNum);
+        for(int i = 1; i < 30; i++){
+            freeInode->direct[i] = -1;
+        }
+        printf("finish creating directory\n");
     }
     fsync(fd);
 
