@@ -19,7 +19,7 @@ libmfs.so : mfs.o ${DEPS}
 	${CC} ${CFLAGS} -fPIC -shared -Wl,-soname,libmfs.so -o libmfs.so mfs.o udp.c -lc
 
 clean:
-	rm -f ./client ./server *.o libmfs.so testfile
+	# rm -f ./client ./server *.o libmfs.so testfile
 
 nofile:
 	rm -f testfile

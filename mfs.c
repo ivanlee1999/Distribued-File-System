@@ -52,12 +52,13 @@ int sendRequest(Msg request, Msg* response, char* address, int port){
 
 
 int MFS_Init(char *hostname, int port){
+    printf("MFS Init\n");
     
     srand(time(0));
     int port_num = (rand() % (MAX_PORT - MIN_PORT) + MIN_PORT);
 
     
-    printf("open portnumbrt %d\n", port_num);
+    printf("open mfs portnumbrt %d\n", port_num);
     sd = UDP_Open(port_num);
     rc = UDP_FillSockAddr(&addrSnd, hostname, port);
     if(rc < 0);
@@ -69,6 +70,7 @@ int MFS_Init(char *hostname, int port){
 
 
 int MFS_Lookup(int pinum, char* name){
+    printf("MFS lookup\n");
     Msg request;
     Msg response;
     response.type = 9;
@@ -82,6 +84,7 @@ int MFS_Lookup(int pinum, char* name){
 }
 
 int MFS_Stat(int inum, MFS_Stat_t *m){
+     printf("MFS Sata\n");
     Msg request,response;
     response.type = 9;
     response.inum = -2;
@@ -95,6 +98,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
 }
 
 int MFS_Write(int inum, char *buffer, int offset, int nbytes){
+    printf("MFS write\n");
     Msg request,response;
     response.type = 9;
     response.inum = -2;
@@ -109,6 +113,7 @@ int MFS_Write(int inum, char *buffer, int offset, int nbytes){
 }        //4
 
 int MFS_Read(int inum, char *buffer, int offset, int nbytes){
+    printf("MFS read\n");
     Msg request,response;
     response.type = 9;
     response.inum = -2;
@@ -123,6 +128,7 @@ int MFS_Read(int inum, char *buffer, int offset, int nbytes){
 }         //5
 
 int MFS_Creat(int pinum, int type, char *name){
+    printf("MFS create\n");
     Msg request,response;
     response.type = 9;
     response.inum = -2;
@@ -136,6 +142,7 @@ int MFS_Creat(int pinum, int type, char *name){
 }                       //6
 
 int MFS_Unlink(int pinum, char *name){
+    printf("MFS unlink\n");
     Msg request,response;
     response.type = 9;
     response.inum = -2;
@@ -146,6 +153,7 @@ int MFS_Unlink(int pinum, char *name){
 }                                //7
 
 int MFS_Shutdown(){
+    printf("MFS Shutdown\n");
     Msg request;
     Msg response;
     response.type = 9;
@@ -153,6 +161,6 @@ int MFS_Shutdown(){
 
     request.requestType = 8;
     rc = sendRequest(request, &response,  serverAddress, serverPort);
-    return rc;
+    return 0;
     
 }

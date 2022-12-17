@@ -28,15 +28,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6484
-/tmp/tmpLmjo_a/p/server 6484 /home/yifanli/CS537/project4/test.img
+Starting server on port 8609
+/tmp/tmpB8qI96/p/server 8609 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 6484 
+server port 8609 
+start address 0x7f18fd235000
+imap address 0x7f18fd236000
+inode_bitmap_len : 1
+data_bitmap_len : 1
+inode_region_len : 1
+data_region_bitmap_len : 32
+num_inodes : 32
+num_data : 32
 server:: waiting...
 server:: read message [size:1000 contents:()]
-shutdown
-open portnumbrt 25833
+shutdown!
+MFS Init
+open mfs portnumbrt 35454
+MFS Shutdown
 waiting for response
 client:: got reply [size:1000 contents:(0)
 
@@ -58,17 +68,50 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 7194
-/tmp/tmpLmjo_a/p/server 7194 /home/yifanli/CS537/project4/test.img
-open portnumbrt 25833
+Starting server on port 6664
+/tmp/tmpB8qI96/p/server 6664 /home/yifanli/CS537/project4/test.img
+server beginning
+before start server
+server port 6664 
+start address 0x7f447b520000
+imap address 0x7f447b521000
+inode_bitmap_len : 1
+data_bitmap_len : 1
+inode_region_len : 1
+data_region_bitmap_len : 32
+num_inodes : 32
+num_data : 32
+server:: waiting...
+server:: read message [size:1000 contents:()]
+freeInodeNum : 1
+pinode->direct[0] : 4
+start address : 0x7f447b520000
+ direntry : 0x7f447b524000, entry inum : 0
+ direntry : 0x7f447b524020, entry inum : 0
+ direntry : 0x7f447b524040, entry inum : -1
+imap value 1
+finish creating regular file
+server:: waiting...
+server:: read message [size:1000 contents:()]
+request2
+server:: waiting...
+server:: read message [size:1000 contents:()]
+shutdown!
+MFS Init
+open mfs portnumbrt 35454
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS Shutdown
+waiting for response
+client:: got reply [size:1000 contents:(	)
 
 
-test creat FAILED
+test creat PASSED
  (creat a file and check with lookup)
- MFS_Creat returned failure inum=0 type=1 name='test'
 
 ('starting', 'write')
 
@@ -84,17 +127,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6963
-/tmp/tmpLmjo_a/p/server 6963 /home/yifanli/CS537/project4/test.img
-open portnumbrt 25833
+Starting server on port 9432
+/tmp/tmpB8qI96/p/server 9432 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 32233
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS write
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Write returned failure inum=1 block=0
 
 
 test write FAILED
  (write then read one block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 ('starting', 'stat')
 
@@ -110,17 +161,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8647
-/tmp/tmpLmjo_a/p/server 8647 /home/yifanli/CS537/project4/test.img
-open portnumbrt 25833
+Starting server on port 6737
+/tmp/tmpB8qI96/p/server 6737 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 32233
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS Sata
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Stat returned failure inum=0
 
 
 test stat FAILED
  (stat a regular file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Stat returned failure inum=0
 
 ('starting', 'overwrite')
 
@@ -136,17 +195,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6418
-/tmp/tmpLmjo_a/p/server 6418 /home/yifanli/CS537/project4/test.img
-open portnumbrt 34893
+Starting server on port 5423
+/tmp/tmpB8qI96/p/server 5423 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 32233
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS write
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Write returned failure inum=1 block=0
 
 
 test overwrite FAILED
  (overwrite a block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 ('starting', 'maxfile')
 
@@ -162,17 +229,25 @@ total blocks        39
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5972
-/tmp/tmpLmjo_a/p/server 5972 /home/yifanli/CS537/project4/test.img
-open portnumbrt 34893
+Starting server on port 7984
+/tmp/tmpB8qI96/p/server 7984 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 20730
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS write
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Write returned failure inum=1 block=0
 
 
 test maxfile FAILED
  (write largest possible file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 ('starting', 'maxfile2')
 
@@ -188,17 +263,26 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8885
-/tmp/tmpLmjo_a/p/server 8885 /home/yifanli/CS537/project4/test.img
-open portnumbrt 34893
+Starting server on port 7119
+/tmp/tmpB8qI96/p/server 7119 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 20730
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+31
+MFS write
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Write returned failure inum=1 block=0
 
 
 test maxfile2 FAILED
  (write more blocks than possible)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 ('starting', 'dir1')
 
@@ -214,11 +298,19 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5651
-/tmp/tmpLmjo_a/p/server 5651 /home/yifanli/CS537/project4/test.img
+Starting server on port 8957
+/tmp/tmpB8qI96/p/server 8957 /home/yifanli/CS537/project4/test.img
 server beginning
 before start server
-server port 5651 
+server port 8957 
+start address 0x7fd45e8f7000
+imap address 0x7fd45e8f8000
+inode_bitmap_len : 1
+data_bitmap_len : 1
+inode_region_len : 1
+data_region_bitmap_len : 32
+num_inodes : 32
+num_data : 32
 server:: waiting...
 server:: read message [size:1000 contents:()]
 request2
@@ -227,12 +319,16 @@ server:: read message [size:1000 contents:()]
 request2
 server:: waiting...
 server:: read message [size:1000 contents:()]
-shutdown
-open portnumbrt 37305
+shutdown!
+MFS Init
+open mfs portnumbrt 20730
+MFS lookup
 waiting for response
 client:: got reply [size:1000 contents:(	)
+MFS lookup
 waiting for response
 client:: got reply [size:1000 contents:(	)
+MFS Shutdown
 waiting for response
 client:: got reply [size:1000 contents:(	)
 
@@ -254,17 +350,22 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6569
-/tmp/tmpLmjo_a/p/server 6569 /home/yifanli/CS537/project4/test.img
-open portnumbrt 37305
+Starting server on port 7668
+/tmp/tmpB8qI96/p/server 7668 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 20730
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=0 name='testdir'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Lookup returned failure inum=0 name='testdir'
 
 
 test dir2 FAILED
  (create a new directory and check it)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
 ('starting', 'baddir')
 
@@ -280,17 +381,55 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 6511
-/tmp/tmpLmjo_a/p/server 6511 /home/yifanli/CS537/project4/test.img
-open portnumbrt 37305
+Starting server on port 8557
+/tmp/tmpB8qI96/p/server 8557 /home/yifanli/CS537/project4/test.img
+server beginning
+before start server
+server port 8557 
+start address 0x7fdd80440000
+imap address 0x7fdd80441000
+inode_bitmap_len : 1
+data_bitmap_len : 1
+inode_region_len : 1
+data_region_bitmap_len : 32
+num_inodes : 32
+num_data : 32
+server:: waiting...
+server:: read message [size:1000 contents:()]
+freeInodeNum : 1
+pinode->direct[0] : 4
+start address : 0x7fdd80440000
+ direntry : 0x7fdd80444000, entry inum : 0
+ direntry : 0x7fdd80444020, entry inum : 0
+ direntry : 0x7fdd80444040, entry inum : -1
+imap value 1
+finish creating regular file
+server:: waiting...
+server:: read message [size:1000 contents:()]
+request2
+server:: waiting...
+server:: read message [size:1000 contents:()]
+server:: waiting...
+server:: read message [size:1000 contents:()]
+shutdown!
+MFS Init
+open mfs portnumbrt 34472
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='testdir'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS create
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS Shutdown
+waiting for response
+client:: got reply [size:1000 contents:(	)
 
 
-test baddir FAILED
+test baddir PASSED
  (try to create a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
 
 ('starting', 'baddir2')
 
@@ -306,17 +445,57 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8253
-/tmp/tmpLmjo_a/p/server 8253 /home/yifanli/CS537/project4/test.img
-open portnumbrt 37305
+Starting server on port 8261
+/tmp/tmpB8qI96/p/server 8261 /home/yifanli/CS537/project4/test.img
+server beginning
+before start server
+server port 8261 
+start address 0x7f672c627000
+imap address 0x7f672c628000
+inode_bitmap_len : 1
+data_bitmap_len : 1
+inode_region_len : 1
+data_region_bitmap_len : 32
+num_inodes : 32
+num_data : 32
+server:: waiting...
+server:: read message [size:1000 contents:()]
+freeInodeNum : 1
+pinode->direct[0] : 4
+start address : 0x7f672c627000
+ direntry : 0x7f672c62b000, entry inum : 0
+ direntry : 0x7f672c62b020, entry inum : 0
+ direntry : 0x7f672c62b040, entry inum : -1
+imap value 1
+finish creating regular file
+server:: waiting...
+server:: read message [size:1000 contents:()]
+request2
+server:: waiting...
+server:: read message [size:1000 contents:()]
+request2
+lookup: not directory
+server:: waiting...
+server:: read message [size:1000 contents:()]
+shutdown!
+MFS Init
+open mfs portnumbrt 34472
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='testdir'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS Shutdown
+waiting for response
+client:: got reply [size:1000 contents:(	)
 
 
-test baddir2 FAILED
+test baddir2 PASSED
  (try to lookup a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
 
 ('starting', 'unlink')
 
@@ -332,17 +511,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5926
-/tmp/tmpLmjo_a/p/server 5926 /home/yifanli/CS537/project4/test.img
-open portnumbrt 29079
+Starting server on port 9504
+/tmp/tmpB8qI96/p/server 9504 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 34472
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS unlink
+waiting for response
+client:: got reply [size:1000 contents:(ÿÿÿÿ)
+Failure: MFS_Unlink returned failure pinum=0 name='test'
 
 
 test unlink FAILED
  (unlink a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Unlink returned failure pinum=0 name='test'
 
 ('starting', 'unlink2')
 
@@ -358,17 +545,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 9307
-/tmp/tmpLmjo_a/p/server 9307 /home/yifanli/CS537/project4/test.img
-open portnumbrt 29079
+Starting server on port 5403
+/tmp/tmpB8qI96/p/server 5403 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 34472
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=0 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS unlink
+waiting for response
+client:: got reply [size:1000 contents:(ÿÿÿÿ)
+Failure: MFS_Unlink returned failure pinum=0 name='test'
 
 
 test unlink2 FAILED
  (unlink a directory)
- MFS_Creat returned failure inum=0 type=0 name='test'
+ MFS_Unlink returned failure pinum=0 name='test'
 
 ('starting', 'empty')
 
@@ -384,17 +579,22 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5913
-/tmp/tmpLmjo_a/p/server 5913 /home/yifanli/CS537/project4/test.img
-open portnumbrt 29079
+Starting server on port 7900
+/tmp/tmpB8qI96/p/server 7900 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 36770
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=0 name='testdir'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Lookup returned failure inum=0 name='testdir'
 
 
 test empty FAILED
  (unlink a non-empty directory)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
 ('starting', 'name')
 
@@ -410,27 +610,19 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 7322
-/tmp/tmpLmjo_a/p/server 7322 /home/yifanli/CS537/project4/test.img
-server beginning
-before start server
-server port 7322 
-server:: waiting...
-server:: read message [size:1000 contents:()]
-server:: waiting...
-server:: read message [size:1000 contents:()]
-shutdown
-open portnumbrt 29079
+Starting server on port 5931
+/tmp/tmpB8qI96/p/server 5931 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 36770
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-waiting for response
-client:: got reply [size:1000 contents:(0)
-Failure: MFS_Shutdown returned failure
+Failure: Name argument too long did not result in failure
 
 
 test name FAILED
  (name too long)
- MFS_Shutdown returned failure
+ Name argument too long did not result in failure
 
 ('starting', 'persist')
 
@@ -446,17 +638,25 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 8325
-/tmp/tmpLmjo_a/p/server 8325 /home/yifanli/CS537/project4/test.img
-open portnumbrt 29079
+Starting server on port 6062
+/tmp/tmpB8qI96/p/server 6062 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 36770
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=1 name='test'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+MFS write
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Write returned failure inum=1 block=0
 
 
 test persist FAILED
  (restart server after creating a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 ('starting', 'bigdir')
 
@@ -472,17 +672,22 @@ total blocks        39
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 9255
-/tmp/tmpLmjo_a/p/server 9255 /home/yifanli/CS537/project4/test.img
-open portnumbrt 37376
+Starting server on port 9320
+/tmp/tmpB8qI96/p/server 9320 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 36770
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=0 name='testdir'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Lookup returned failure inum=0 name='testdir'
 
 
 test bigdir FAILED
  (create a directory with 126 files)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
 ('starting', 'deep')
 
@@ -498,17 +703,22 @@ total blocks        39
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 9964
-/tmp/tmpLmjo_a/p/server 9964 /home/yifanli/CS537/project4/test.img
-open portnumbrt 37376
+Starting server on port 8059
+/tmp/tmpB8qI96/p/server 8059 /home/yifanli/CS537/project4/test.img
+MFS Init
+open mfs portnumbrt 36759
+MFS create
 waiting for response
 client:: got reply [size:1000 contents:(0)
-Failure: MFS_Creat returned failure inum=0 type=0 name='testdir'
+MFS lookup
+waiting for response
+client:: got reply [size:1000 contents:(	)
+Failure: MFS_Lookup returned failure inum=0 name='testdir'
 
 
 test deep FAILED
  (create many deeply nested directories)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
 **********************************************************************
 Summary:
@@ -518,72 +728,69 @@ test build PASSED
 test shutdown PASSED
  (init server and client then call shutdown)
 
-test creat FAILED
+test creat PASSED
  (creat a file and check with lookup)
- MFS_Creat returned failure inum=0 type=1 name='test'
 
 test write FAILED
  (write then read one block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 test stat FAILED
  (stat a regular file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Stat returned failure inum=0
 
 test overwrite FAILED
  (overwrite a block)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 test maxfile FAILED
  (write largest possible file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 test maxfile2 FAILED
  (write more blocks than possible)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 test dir1 PASSED
  (check root for dot entries)
 
 test dir2 FAILED
  (create a new directory and check it)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
-test baddir FAILED
+test baddir PASSED
  (try to create a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
 
-test baddir2 FAILED
+test baddir2 PASSED
  (try to lookup a file with a file parent inode)
- MFS_Creat returned failure inum=0 type=1 name='testdir'
 
 test unlink FAILED
  (unlink a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Unlink returned failure pinum=0 name='test'
 
 test unlink2 FAILED
  (unlink a directory)
- MFS_Creat returned failure inum=0 type=0 name='test'
+ MFS_Unlink returned failure pinum=0 name='test'
 
 test empty FAILED
  (unlink a non-empty directory)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
 test name FAILED
  (name too long)
- MFS_Shutdown returned failure
+ Name argument too long did not result in failure
 
 test persist FAILED
  (restart server after creating a file)
- MFS_Creat returned failure inum=0 type=1 name='test'
+ MFS_Write returned failure inum=1 block=0
 
 test bigdir FAILED
  (create a directory with 126 files)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
 test deep FAILED
  (create many deeply nested directories)
- MFS_Creat returned failure inum=0 type=0 name='testdir'
+ MFS_Lookup returned failure inum=0 name='testdir'
 
-Passed 3 of 19 tests.
-Overall 3 of 19
+Passed 6 of 19 tests.
+Overall 6 of 19

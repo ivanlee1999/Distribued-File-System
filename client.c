@@ -38,7 +38,9 @@ int main(int argc, char *argv[]) {
     }
     if(strcmp(request, "6") == 0){
         printf("request create\n");
-        MFS_Creat(10, 0, "a");
+        MFS_Creat(0, 1, "test");
+        int rc = MFS_Lookup(0, "test");
+        printf("return value: %d\n", rc);
     }
     if(strcmp(request, "8") == 0){
         printf("request8\n");

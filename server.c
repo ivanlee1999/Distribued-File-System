@@ -340,23 +340,31 @@ int FS_Creat(int pinum, int type, char *name){
 
     //get newest freeinode
     int freeInodeNum = findFreeInode();
+    printf("freeInodeNum : %d\n", freeInodeNum);
     inode_t* freeInode = malloc(sizeof(inode_t));
     // freeInode = (inode_t*)(startAddress + sb->inode_region_addr * freeInodeNum);
     freeInode = (inode_t*) (inodeBlockAddress + freeInodeNum * sizeof(inode_t));
     
 
     //get the datablock of directory
-    int pinodeDataBlockAddress = pinode->direct[0] * sizeof(UFS_BLOCK_SIZE);
+    printf("pinode->direct[0] : %d\n", pinode->direct[0]);
+    printf("start address : %p\n", startAddress);
+    dir_ent_t*  pinodeDataBlockAddress = (dir_ent_t*) (startAddress + (int)(pinode->direct[0]) * UFS_BLOCK_SIZE);
 
     for(int i = 0; i< UFS_BLOCK_SIZE/sizeof(dir_ent_t); i++) {
-        int entryAddress = pinodeDataBlockAddress + sizeof(dir_ent_t) * i;
-        lseek(fd, entryAddress, SEEK_SET);
-        dir_ent_t* dirEntry = malloc(sizeof(dir_ent_t));
-        read(fd, dirEntry, sizeof(dir_ent_t));
+        // int entryAddress = pinodeDataBlockAddress + sizeof(dir_ent_t) * i;
+        // lseek(fd, entryAddress, SEEK_SET);
+        dir_ent_t* dirEntry;
+        dirEntry = pinodeDataBlockAddress + i;
+        // read(fd, dirEntry, sizeof(dir_ent_t));
+        
+
+        printf(" direntry : %p, entry inum : %d\n", dirEntry, dirEntry->inum);
         if(dirEntry->inum == -1){
             dirEntry->inum = freeInodeNum;
             strcpy(dirEntry->name, name);
             set_bit((unsigned int *)imapAddress, freeInodeNum);
+            printf("imap value %d\n", get_bit((unsigned int *)imapAddress, 1));
             pinode->size += sizeof(dir_ent_t);
             freeInode->type = type;
             reply.inum = 0;
@@ -368,8 +376,10 @@ int FS_Creat(int pinum, int type, char *name){
         for(int i = 0; i < DIRECT_PTRS; i++){
             int newDataBlockNum = findFreeDataBlock();
             freeInode->direct[i] = newDataBlockNum + sb->data_region_addr;
+            
             set_bit((unsigned int *)dmapAddress, newDataBlockNum);
         }
+        printf("finish creating regular file\n");
     }
     else if(type == MFS_DIRECTORY){
         int newDataBlockNum = findFreeDataBlock();
@@ -386,6 +396,7 @@ int FS_Creat(int pinum, int type, char *name){
             (allDirEntryInsideBlock+i)->inum = -1;
         }
         set_bit((unsigned int *)dataBlockAddress, newDataBlockNum);
+            printf("finish creating directory\n");
     }
     fsync(fd);
 
@@ -454,7 +465,7 @@ int FS_Shutdown(){
 	//isShutdown = true;
     UDP_Write(sd, &addr, (char*)&reply, sizeof(Msg));
 	UDP_Close(portNumber);
-    printf("shutdown\n");
+    printf("shutdown!\n");
 	exit(0);
 	return 0;
 }
@@ -472,7 +483,9 @@ int fsInitMmap(int fd){
     void* fileAddr = mmap(NULL, fileStat.st_size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
     sb = (super_t *) fileAddr;
     startAddress = fileAddr;
+    printf("start address %p\n", startAddress);
     imapAddress = (char *)sb + sb->inode_bitmap_addr * UFS_BLOCK_SIZE;
+    printf("imap address %p\n", imapAddress);
     dmapAddress = (char *)sb + sb->data_bitmap_addr * UFS_BLOCK_SIZE;
     inodeBlockAddress = (char *)sb + sb->inode_region_addr * UFS_BLOCK_SIZE;
     dataBlockAddress = (char *)sb + sb->data_region_addr * UFS_BLOCK_SIZE;
@@ -488,6 +501,12 @@ int fsInit(char* img){
 
     read(fd, &superBlock, sizeof(super_t));
     fsInitMmap(fd);
+    printf("inode_bitmap_len : %d\n", superBlock.data_bitmap_len);
+    printf("data_bitmap_len : %d\n", superBlock.data_bitmap_len);
+    printf("inode_region_len : %d\n", superBlock.inode_region_len);
+    printf("data_region_bitmap_len : %d\n", superBlock.data_region_len);
+    printf("num_inodes : %d\n", superBlock.num_inodes);
+    printf("num_data : %d\n", superBlock.num_data);
     iMapStartPosition = superBlock.inode_bitmap_addr * UFS_BLOCK_SIZE;     //should be equal to 4096
     dMapStartPosition = superBlock.data_bitmap_addr * UFS_BLOCK_SIZE;
     inodeStartPosition = superBlock.inode_region_addr * UFS_BLOCK_SIZE;
@@ -542,6 +561,7 @@ int startServer(int port, char* img){
                 break;
             case 8:
                 FS_Shutdown();
+                exit(0);
                 break;
             default:
                 break;
