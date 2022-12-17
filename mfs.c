@@ -25,18 +25,14 @@ int MAX_PORT = 40000;
 
 char* serverAddress;
 int serverPort;
+int sd;
+
+struct sockaddr_in addrSnd, addrRcv;
 
 
 int sendRequest(Msg request, Msg response, char* address, int port){
-    srand(time(0));
-    int port_num = (rand() % (MAX_PORT - MIN_PORT) + MIN_PORT);
-
-    struct sockaddr_in addrSnd, addrRcv;
-    printf("open portnumbrt %d\n", port_num);
-    int sd = UDP_Open(port_num);
-    int rc = UDP_FillSockAddr(&addrSnd, address, port);
     
-    
+    int rc;
     rc = UDP_Write(sd, &addrSnd,(char*) &request, BUFFER_SIZE);
 
     if (rc < 0) {
@@ -53,8 +49,18 @@ int sendRequest(Msg request, Msg response, char* address, int port){
 
 
 int MFS_Init(char *hostname, int port){
-    serverAddress = hostname;
-    serverPort = port;
+    
+    srand(time(0));
+    int port_num = (rand() % (MAX_PORT - MIN_PORT) + MIN_PORT);
+
+    
+    printf("open portnumbrt %d\n", port_num);
+    sd = UDP_Open(port_num);
+    int rc = UDP_FillSockAddr(&addrSnd, hostname, port);
+    if(rc < 0);
+    
+    // serverAddress = hostname;
+    // serverPort = port;
     return 0;
 }
 

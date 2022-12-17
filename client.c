@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
     printf("compile finished\n");
     struct sockaddr_in addrSnd, addrRcv;
 
-    int sd = UDP_Open(20000);
-    int rc = UDP_FillSockAddr(&addrSnd, "localhost", 2343);
+    // int sd = UDP_Open(20000);
+    // int rc = UDP_FillSockAddr(&addrSnd, "localhost", 2343);
     char* request = argv[1];
     MFS_Init("localhost", 2343);
     
@@ -28,9 +28,9 @@ int main(int argc, char *argv[]) {
         MFS_Lookup(2, "test");
     }
     if(strcmp(request, "3") == 0){
-        printf("request3\n");
+        printf("request stat\n");
         MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
-        MFS_Stat(3, m);
+        MFS_Stat(20, m);
         printf("size: %d \n", m->size);
         printf("type: %d \n", m->type);
     }

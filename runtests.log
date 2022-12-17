@@ -28,13 +28,15 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5129
-/tmp/tmpOZCWu0/p/server 5129 /home/yifanli/CS537/project4/test.img
-server port 5129 
+Starting server on port 7295
+/tmp/tmp7GWweW/p/server 7295 /home/yifanli/CS537/project4/test.img
+server beginning
+before start server
+server port 7295 
 server:: waiting...
 server:: read message [size:1000 contents:()]
 shutdown
-open portnumbrt 29139
+open portnumbrt 39729
 waiting for response
 client:: got reply [size:1000 contents:(0)
 
@@ -56,18 +58,506 @@ total blocks        36
 layout details
   inode bitmap address/len 1 [1]
   data bitmap address/len  2 [1]
-Starting server on port 5057
-/tmp/tmpOZCWu0/p/server 5057 /home/yifanli/CS537/project4/test.img
-open portnumbrt 29139
-waiting for response
-client:: got reply [size:1000 contents:(0)
-open portnumbrt 29139
-client:: failed to send
+Starting server on port 6029
+/tmp/tmp7GWweW/p/server 6029 /home/yifanli/CS537/project4/test.img
 
 
 test creat FAILED
  (creat a file and check with lookup)
  Timelimit (10.0s) exceeded
 
-Skipped 16 tests.
-To keep testing after failing a test, use flag '-c' or '--continue'
+('starting', 'write')
+
+**********************************************************************
+
+Test write
+write then read one block
+
+**********************************************************************
+open portnumbrt 38900
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5656
+/tmp/tmp7GWweW/p/server 5656 /home/yifanli/CS537/project4/test.img
+
+
+test write FAILED
+ (write then read one block)
+ Timelimit (10.0s) exceeded
+
+('starting', 'stat')
+
+**********************************************************************
+
+Test stat
+stat a regular file
+
+**********************************************************************
+open portnumbrt 20684
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 8074
+/tmp/tmp7GWweW/p/server 8074 /home/yifanli/CS537/project4/test.img
+
+
+test stat FAILED
+ (stat a regular file)
+ Timelimit (10.0s) exceeded
+
+('starting', 'overwrite')
+
+**********************************************************************
+
+Test overwrite
+overwrite a block
+
+**********************************************************************
+open portnumbrt 37867
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 8354
+/tmp/tmp7GWweW/p/server 8354 /home/yifanli/CS537/project4/test.img
+
+
+test overwrite FAILED
+ (overwrite a block)
+ Timelimit (10.0s) exceeded
+
+('starting', 'maxfile')
+
+**********************************************************************
+
+Test maxfile
+write largest possible file
+
+**********************************************************************
+open portnumbrt 34933
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        39
+  inodes            128 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5334
+/tmp/tmp7GWweW/p/server 5334 /home/yifanli/CS537/project4/test.img
+
+
+test maxfile FAILED
+ (write largest possible file)
+ Timelimit (10.0s) exceeded
+
+('starting', 'maxfile2')
+
+**********************************************************************
+
+Test maxfile2
+write more blocks than possible
+
+**********************************************************************
+open portnumbrt 32189
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5347
+/tmp/tmp7GWweW/p/server 5347 /home/yifanli/CS537/project4/test.img
+
+
+test maxfile2 FAILED
+ (write more blocks than possible)
+ Timelimit (10.0s) exceeded
+
+('starting', 'dir1')
+
+**********************************************************************
+
+Test dir1
+check root for dot entries
+
+**********************************************************************
+open portnumbrt 31970
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9969
+/tmp/tmp7GWweW/p/server 9969 /home/yifanli/CS537/project4/test.img
+server beginning
+before start server
+server port 9969 
+server:: waiting...
+server:: read message [size:1000 contents:()]
+request2
+server:: waiting...
+server:: read message [size:1000 contents:()]
+request2
+server:: waiting...
+server:: read message [size:1000 contents:()]
+shutdown
+open portnumbrt 35764
+waiting for response
+client:: got reply [size:1000 contents:(	)
+waiting for response
+client:: got reply [size:1000 contents:(	)
+waiting for response
+client:: got reply [size:1000 contents:(	)
+
+
+test dir1 PASSED
+ (check root for dot entries)
+
+('starting', 'dir2')
+
+**********************************************************************
+
+Test dir2
+create a new directory and check it
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5712
+/tmp/tmp7GWweW/p/server 5712 /home/yifanli/CS537/project4/test.img
+
+
+test dir2 FAILED
+ (create a new directory and check it)
+ Timelimit (10.0s) exceeded
+
+('starting', 'baddir')
+
+**********************************************************************
+
+Test baddir
+try to create a file with a file parent inode
+
+**********************************************************************
+open portnumbrt 21843
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6503
+/tmp/tmp7GWweW/p/server 6503 /home/yifanli/CS537/project4/test.img
+
+
+test baddir FAILED
+ (try to create a file with a file parent inode)
+ Timelimit (15.0s) exceeded
+
+('starting', 'baddir2')
+
+**********************************************************************
+
+Test baddir2
+try to lookup a file with a file parent inode
+
+**********************************************************************
+open portnumbrt 34160
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9701
+/tmp/tmp7GWweW/p/server 9701 /home/yifanli/CS537/project4/test.img
+
+
+test baddir2 FAILED
+ (try to lookup a file with a file parent inode)
+ Timelimit (15.0s) exceeded
+
+('starting', 'unlink')
+
+**********************************************************************
+
+Test unlink
+unlink a file
+
+**********************************************************************
+open portnumbrt 26001
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9080
+/tmp/tmp7GWweW/p/server 9080 /home/yifanli/CS537/project4/test.img
+
+
+test unlink FAILED
+ (unlink a file)
+ Timelimit (10.0s) exceeded
+
+('starting', 'unlink2')
+
+**********************************************************************
+
+Test unlink2
+unlink a directory
+
+**********************************************************************
+open portnumbrt 29650
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6156
+/tmp/tmp7GWweW/p/server 6156 /home/yifanli/CS537/project4/test.img
+
+
+test unlink2 FAILED
+ (unlink a directory)
+ Timelimit (10.0s) exceeded
+
+('starting', 'empty')
+
+**********************************************************************
+
+Test empty
+unlink a non-empty directory
+
+**********************************************************************
+open portnumbrt 34059
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5231
+/tmp/tmp7GWweW/p/server 5231 /home/yifanli/CS537/project4/test.img
+
+
+test empty FAILED
+ (unlink a non-empty directory)
+ Timelimit (10.0s) exceeded
+
+('starting', 'name')
+
+**********************************************************************
+
+Test name
+name too long
+
+**********************************************************************
+open portnumbrt 27287
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6792
+/tmp/tmp7GWweW/p/server 6792 /home/yifanli/CS537/project4/test.img
+
+
+test name FAILED
+ (name too long)
+ Timelimit (10.0s) exceeded
+
+('starting', 'persist')
+
+**********************************************************************
+
+Test persist
+restart server after creating a file
+
+**********************************************************************
+open portnumbrt 31240
+waiting for response
+client:: got reply [size:-1 contents:()
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 8202
+/tmp/tmp7GWweW/p/server 8202 /home/yifanli/CS537/project4/test.img
+
+
+test persist FAILED
+ (restart server after creating a file)
+ Timelimit (30.0s) exceeded
+
+('starting', 'bigdir')
+
+**********************************************************************
+
+Test bigdir
+create a directory with 126 files
+
+**********************************************************************
+open portnumbrt 39059
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        39
+  inodes            128 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6011
+/tmp/tmp7GWweW/p/server 6011 /home/yifanli/CS537/project4/test.img
+
+
+test bigdir FAILED
+ (create a directory with 126 files)
+ Timelimit (180.0s) exceeded
+
+('starting', 'deep')
+
+**********************************************************************
+
+Test deep
+create many deeply nested directories
+
+**********************************************************************
+open portnumbrt 27049
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+total blocks        39
+  inodes            128 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7144
+/tmp/tmp7GWweW/p/server 7144 /home/yifanli/CS537/project4/test.img
+open portnumbrt 21554
+waiting for response
+client:: got reply [size:-1 contents:(ð±¸vU)
+
+
+test deep FAILED
+ (create many deeply nested directories)
+ Timelimit (60.0s) exceeded
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+
+test shutdown PASSED
+ (init server and client then call shutdown)
+
+test creat FAILED
+ (creat a file and check with lookup)
+ Timelimit (10.0s) exceeded
+
+test write FAILED
+ (write then read one block)
+ Timelimit (10.0s) exceeded
+
+test stat FAILED
+ (stat a regular file)
+ Timelimit (10.0s) exceeded
+
+test overwrite FAILED
+ (overwrite a block)
+ Timelimit (10.0s) exceeded
+
+test maxfile FAILED
+ (write largest possible file)
+ Timelimit (10.0s) exceeded
+
+test maxfile2 FAILED
+ (write more blocks than possible)
+ Timelimit (10.0s) exceeded
+
+test dir1 PASSED
+ (check root for dot entries)
+
+test dir2 FAILED
+ (create a new directory and check it)
+ Timelimit (10.0s) exceeded
+
+test baddir FAILED
+ (try to create a file with a file parent inode)
+ Timelimit (15.0s) exceeded
+
+test baddir2 FAILED
+ (try to lookup a file with a file parent inode)
+ Timelimit (15.0s) exceeded
+
+test unlink FAILED
+ (unlink a file)
+ Timelimit (10.0s) exceeded
+
+test unlink2 FAILED
+ (unlink a directory)
+ Timelimit (10.0s) exceeded
+
+test empty FAILED
+ (unlink a non-empty directory)
+ Timelimit (10.0s) exceeded
+
+test name FAILED
+ (name too long)
+ Timelimit (10.0s) exceeded
+
+test persist FAILED
+ (restart server after creating a file)
+ Timelimit (30.0s) exceeded
+
+test bigdir FAILED
+ (create a directory with 126 files)
+ Timelimit (180.0s) exceeded
+
+test deep FAILED
+ (create many deeply nested directories)
+ Timelimit (60.0s) exceeded
+
+Passed 3 of 19 tests.
+Overall 3 of 19
