@@ -61,14 +61,15 @@ void set_bit(unsigned int *bitmap, int position) {
 
 inode_t* getpinode(int pinum){
 
-    int pinumPosition = inodeStartPosition + pinum * sizeof(inode_t);
+    // int pinumPosition = inodeStartPosition + pinum * sizeof(inode_t);
 
     //check inode bitmap
     //check inode type
     inode_t* pinode = malloc(sizeof(inode_t));
     //move read pointer to the position, SEEK_SET  means starting from the beginning
-    lseek(fd, pinumPosition, SEEK_SET);
-    read(fd, pinode, sizeof(inode_t));
+    // lseek(fd, pinumPosition, SEEK_SET);
+    // read(fd, pinode, sizeof(inode_t));
+    pinode = (inode_t*)(inodeBlockAddress +   pinum * sizeof(inode_t));
     return pinode;
 }
 
