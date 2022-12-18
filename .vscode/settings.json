@@ -2,6 +2,7 @@
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "files.associations": {
         "structure.h": "c",
-        "in.h": "c"
+        "in.h": "c",
+        "typeinfo": "c"
     }
 }

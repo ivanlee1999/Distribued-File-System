@@ -42,10 +42,10 @@ int sendRequest(Msg request, Msg* response, char* address, int port){
     }
     // response->stat = malloc(sizeof(MFS_Stat_t));
 
-    printf("waiting for response\n");
+    // printf("waiting for response\n");
     rc = UDP_Read(sd, &addrRcv,(char*) response, BUFFER_SIZE);
     // printf("state size %d\n", response->stat.size);
-    printf("client:: got reply [size:%d contents:(%s)\n", rc, (char*)response);
+    // printf("client:: got reply [size:%d contents:(%s)\n", rc, (char*)response);
     return response->inum;
 }
 
@@ -162,17 +162,17 @@ int MFS_Creat(int pinum, int type, char *name){
 }                       //6
 
 int MFS_Unlink(int pinum, char *name){
-    if(strlen(name) > 27) return -1;
-    Msg message, respond;
-    message.requestType = 7;
-    message.inum = pinum;
-    strcpy(message.buffer, name);
-    if(send_rcv((char*)&message, (char*)&respond) < 0){
-        return -1;
-    }
-    if(respond.requestType != 7) return -1;
-    if(respond.inum < 0) return -1;
-    return 0;
+    printf("MFS unlink, pinum: %d, name: %s\n", pinum, name);
+    Msg request;
+    Msg response;
+    response.type = 9;
+    response.inum = -5;
+    request.requestType =7;
+    request.inum = pinum;
+    strncpy(request.name,name,28);
+    //request.name = name;
+    rc = sendRequest(request, &response,  serverAddress, serverPort);
+    return rc;
 }                                //7
 
 int MFS_Shutdown(){

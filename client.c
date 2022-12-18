@@ -74,6 +74,22 @@ int main(int argc, char *argv[]) {
         printf("request8\n");
         MFS_Shutdown();
     }
+    if(strcmp(request, "0") == 0){
+        printf("test empty\n");
+        MFS_Creat(0, 0, "testdir");
+        int rc = MFS_Lookup(0, "testdir");
+        MFS_Creat(1, 1, "testfile");
+        rc = MFS_Lookup(1, "testfile");
+        printf("return value: %d\n", rc);
+        rc = MFS_Unlink(0, "testdir");
+        printf("return value: %d\n", rc);
+        rc = MFS_Unlink(0, "testfile");
+        printf("return value: %d\n", rc);
+        rc = MFS_Unlink(0, "testdir");
+        printf("return value: %d\n", rc);
+
+    }
+
     
     return 0;
 }
