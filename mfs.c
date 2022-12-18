@@ -21,7 +21,7 @@ int MAX_PORT = 40000;
 // int fd = UDP_Open(port_num);
 
 
-#define BUFFER_SIZE (1000)
+#define BUFFER_SIZE (4096)
 
 char* serverAddress;
 int serverPort;
@@ -47,6 +47,12 @@ int sendRequest(Msg request, Msg* response, char* address, int port){
     // printf("state size %d\n", response->stat.size);
     printf("client:: got reply [size:%d contents:(%s)\n", rc, (char*)response);
     return response->inum;
+}
+
+int send_rcv(char* message, char* respond){
+    UDP_Write(sd, &addrSnd, message, sizeof(Msg));
+    int rcv_rc = UDP_Read(sd, &addrRcv, respond, sizeof(Msg));
+    return rcv_rc;
 }
 
 
@@ -98,33 +104,47 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
 }
 
 int MFS_Write(int inum, char *buffer, int offset, int nbytes){
-    printf("MFS write\n");
-    Msg request,response;
-    response.type = 9;
-    response.inum = -2;
-    request.requestType= 4;
-    //request.buffer = buffer;
-    strncpy(request.buffer,buffer,sizeof(request.buffer));
-    request.inum = inum;
-    request.offset = offset;
-    request.nbytes = nbytes;
-    rc = sendRequest(request, &response,  serverAddress, serverPort);
-    return rc;
+    if(nbytes > 4096) return -1;
+    Msg message, respond;
+    message.requestType = 4;
+    message.inum = inum;
+    memcpy((char*)message.buffer, buffer, nbytes);
+    //printf("DEBUG: client write\n");
+    /*
+    for(int i = 0; i < nbytes; i++){
+        printf("%c", message.buf[i]);
+    }
+    printf("\n");*/
+    message.offset = offset;
+    message.nbytes = nbytes;
+    if(send_rcv((char*)&message, (char*)&respond) < 0){
+        return -1;
+    }
+    if(respond.requestType != 4){
+        printf("here1\n");
+        return -1;
+    }
+    if(respond.inum < 0){ 
+        printf("here2\n");
+        return -1;
+    }
+    return 0;
 }        //4
 
 int MFS_Read(int inum, char *buffer, int offset, int nbytes){
-    printf("MFS read\n");
-    Msg request,response;
-    response.type = 9;
-    response.inum = -2;
-    request.requestType= 5;
-    //request.buffer = buffer;
-    strncpy(request.buffer,buffer,sizeof(request.buffer));
-    request.inum = inum;
-    request.offset = offset;
-    request.nbytes = nbytes;
-    rc = sendRequest(request, &response,  serverAddress, serverPort);
-    return rc;
+    if(nbytes > 4096) return -1;
+    Msg message, respond;
+    message.requestType = 5;
+    message.inum = inum;
+    message.offset = offset;
+    message.nbytes = nbytes;
+    if(send_rcv((char*)&message, (char*)&respond) < 0){
+        return -1;
+    }
+    if(respond.requestType != 5) return -1;
+    if(respond.inum < 0) return -1;
+    memcpy(buffer, respond.buffer, nbytes);
+    return 0;
 }         //5
 
 int MFS_Creat(int pinum, int type, char *name){
@@ -142,14 +162,17 @@ int MFS_Creat(int pinum, int type, char *name){
 }                       //6
 
 int MFS_Unlink(int pinum, char *name){
-    printf("MFS unlink\n");
-    Msg request,response;
-    response.type = 9;
-    response.inum = -2;
-    request.inum = pinum;
-    request.requestType = 7;
-    rc = sendRequest(request, &response,  serverAddress, serverPort);
-    return rc;
+    if(strlen(name) > 27) return -1;
+    Msg message, respond;
+    message.requestType = 7;
+    message.inum = pinum;
+    strcpy(message.buffer, name);
+    if(send_rcv((char*)&message, (char*)&respond) < 0){
+        return -1;
+    }
+    if(respond.requestType != 7) return -1;
+    if(respond.inum < 0) return -1;
+    return 0;
 }                                //7
 
 int MFS_Shutdown(){

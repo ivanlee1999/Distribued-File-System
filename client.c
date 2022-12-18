@@ -39,6 +39,28 @@ int main(int argc, char *argv[]) {
         printf("type: %d \n", m->type);
     }
 
+    if(strcmp(request,"5") ==0){
+        printf("request read\n");
+        //MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
+        char* buffer = (char*)malloc(1);
+        printf("buffer before : %#X \n", buffer);
+        int rc = MFS_Read(atoi(argv[2]), buffer,0,1);
+        printf("return value: %d\n", rc);
+        printf("buffer content: %#X \n", buffer);
+        //printf("type: %d \n", m->type);
+    }
+
+    if(strcmp(request, "9") == 0){
+
+        printf("request unlink\n");
+        //MFS_Stat_t* m = malloc(sizeof(MFS_Stat_t));
+        int rc = MFS_Unlink(atoi(argv[2]),"testdir");
+        printf("return value: %d\n", rc);
+        // printf("size: %d \n", m->size);
+        // printf("type: %d \n", m->type);
+
+    }
+
     if(strcmp(request, "6") == 0){
         printf("request create\n");
         MFS_Creat(0, 0, "makedir");
